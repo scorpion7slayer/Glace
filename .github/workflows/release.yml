@@ -4,6 +4,11 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag to publish
+        required: true
 
 permissions:
   contents: write
@@ -15,17 +20,23 @@ jobs:
       APP_NAME: Glace
       PROJECT_PATH: Ice.xcodeproj
       SCHEME: Ice
-      DERIVED_DATA_PATH: ${{ runner.temp }}/GlaceDerivedData
-      ARCHIVE_PATH: ${{ runner.temp }}/Glace.xcarchive
-      EXPORT_PATH: ${{ runner.temp }}/GlaceExport
-      PAGES_PATH: ${{ github.workspace }}/gh-pages
-      PAGES_UPDATES_PATH: ${{ github.workspace }}/gh-pages/updates
       PAGES_BASE_URL: https://scorpion7slayer.github.io/Glace/updates
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Initialize job paths
+        run: |
+          set -euo pipefail
+          {
+            echo "DERIVED_DATA_PATH=$RUNNER_TEMP/GlaceDerivedData"
+            echo "ARCHIVE_PATH=$RUNNER_TEMP/Glace.xcarchive"
+            echo "EXPORT_PATH=$RUNNER_TEMP/GlaceExport"
+            echo "PAGES_PATH=$GITHUB_WORKSPACE/gh-pages"
+            echo "PAGES_UPDATES_PATH=$GITHUB_WORKSPACE/gh-pages/updates"
+          } >> "$GITHUB_ENV"
 
       - name: Validate release secrets
         env:
@@ -61,7 +72,7 @@ jobs:
 
       - name: Derive release version
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
         run: |
           set -euo pipefail
           MARKETING_VERSION="${RELEASE_TAG#v}"
