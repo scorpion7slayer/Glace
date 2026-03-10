@@ -63,10 +63,7 @@ final class ControlItem {
 
     /// The identifier of the control item's window.
     var windowID: CGWindowID? {
-        guard let window else {
-            return nil
-        }
-        return CGWindowID(window.windowNumber)
+        window?.cgWindowID
     }
 
     /// A Boolean value that indicates whether the control item serves as
@@ -422,10 +419,10 @@ final class ControlItem {
             return hotkeySettingsManager.hotkey(withAction: action)
         }
 
-        let menu = NSMenu(title: "Ice")
+        let menu = NSMenu(title: "Glace")
 
         let settingsItem = NSMenuItem(
-            title: "Ice Settings…",
+            title: "Glace Settings…",
             action: #selector(AppDelegate.openSettingsWindow),
             keyEquivalent: ","
         )
@@ -504,7 +501,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: "Quit Ice",
+            title: "Quit Glace",
             action: #selector(NSApp.terminate),
             keyEquivalent: "q"
         )

@@ -94,7 +94,7 @@ final class LayoutBarItemView: NSView {
                 .sink { [weak self] images in
                     guard
                         let self,
-                        let cgImage = images[item.info]
+                        let cgImage = images[item.windowID]
                     else {
                         return
                     }

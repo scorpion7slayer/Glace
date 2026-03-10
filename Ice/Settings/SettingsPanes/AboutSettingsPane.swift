@@ -20,6 +20,11 @@ struct AboutSettingsPane: View {
 
     private var contributeURL: URL {
         // swiftlint:disable:next force_unwrapping
+        URL(string: "https://github.com/scorpion7slayer/Glace")!
+    }
+
+    private var originalProjectURL: URL {
+        // swiftlint:disable:next force_unwrapping
         URL(string: "https://github.com/jordanbaird/Ice")!
     }
 
@@ -78,7 +83,7 @@ struct AboutSettingsPane: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Ice")
+                    Text("Glace")
                         .font(.system(size: 72, weight: .medium))
                         .foregroundStyle(.primary)
 
@@ -86,9 +91,20 @@ struct AboutSettingsPane: View {
                         .font(.system(size: 18))
                         .foregroundStyle(.secondary)
 
-                    Text(Constants.copyrightString)
+                    Text("Copyright 2026 scorpion7slayer")
                         .font(.system(size: 14, weight: .medium))
                         .foregroundStyle(.tertiary)
+
+                    Text("Glace is a fork of Ice by Jordan Baird.")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+
+                    Button("@jordanbaird on GitHub") {
+                        openURL(originalProjectURL)
+                    }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.link)
                 }
             }
         }
@@ -137,7 +153,7 @@ struct AboutSettingsPane: View {
     @ViewBuilder
     private var bottomBar: some View {
         HStack {
-            Button("Quit Ice") {
+            Button("Quit Glace") {
                 NSApp.terminate(nil)
             }
             Spacer()
@@ -150,7 +166,7 @@ struct AboutSettingsPane: View {
             Button("Report a Bug") {
                 openURL(issuesURL)
             }
-            Button("Support Ice", systemImage: "heart.circle.fill") {
+            Button("Support Glace", systemImage: "heart.circle.fill") {
                 openURL(donateURL)
             }
         }

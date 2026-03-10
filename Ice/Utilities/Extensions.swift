@@ -351,6 +351,16 @@ extension NSApplication {
     }
 }
 
+// MARK: - NSWindow
+
+extension NSWindow {
+    /// Returns the Core Graphics window identifier if the AppKit window number is valid.
+    var cgWindowID: CGWindowID? {
+        let windowNumber = windowNumber
+        return CGWindowID(exactly: windowNumber)
+    }
+}
+
 // MARK: - NSBezierPath
 
 extension NSBezierPath {

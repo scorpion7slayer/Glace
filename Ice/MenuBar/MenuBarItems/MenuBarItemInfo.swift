@@ -30,6 +30,20 @@ struct MenuBarItemInfo: Hashable, CustomStringConvertible {
 
 // MARK: MenuBarItemInfo Constants
 extension MenuBarItemInfo {
+    /// Returns the Glace control item info associated with the given title, if any.
+    static func controlItemInfo(for title: String) -> MenuBarItemInfo? {
+        switch title {
+        case ControlItem.Identifier.iceIcon.rawValue:
+            .iceIcon
+        case ControlItem.Identifier.hidden.rawValue:
+            .hiddenControlItem
+        case ControlItem.Identifier.alwaysHidden.rawValue:
+            .alwaysHiddenControlItem
+        default:
+            nil
+        }
+    }
+
     /// An array of items whose movement is prevented by macOS.
     static let immovableItems = [clock, siri, controlCenter]
 

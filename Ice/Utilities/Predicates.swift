@@ -115,6 +115,34 @@ extension Predicates where Input == MenuBarItem {
             isInAlwaysHiddenSection: isInAlwaysHiddenSection(alwaysHiddenControlItem: alwaysHiddenControlItem)
         )
     }
+
+    /// Creates a group of predicates that separates menu bar items into sections using
+    /// known control item frames instead of CGWindow-backed menu bar items.
+    static func sectionPredicates(hiddenControlFrame: CGRect, alwaysHiddenControlFrame: CGRect?) -> SectionPredicates {
+        let hiddenFrame = hiddenControlFrame
+        let alwaysHiddenFrame = alwaysHiddenControlFrame
+
+        return SectionPredicates(
+            isInVisibleSection: predicate { item in
+                item.frame.minX >= hiddenFrame.maxX
+            },
+            isInHiddenSection: predicate { item in
+                if let alwaysHiddenFrame {
+                    return item.frame.maxX <= hiddenFrame.minX &&
+                        item.frame.minX >= alwaysHiddenFrame.maxX
+                } else {
+                    return item.frame.maxX <= hiddenFrame.minX
+                }
+            },
+            isInAlwaysHiddenSection: predicate { item in
+                if let alwaysHiddenFrame {
+                    return item.frame.maxX <= alwaysHiddenFrame.minX
+                } else {
+                    return false
+                }
+            }
+        )
+    }
 }
 
 // MARK: - Control Item Predicates

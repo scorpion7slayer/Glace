@@ -1,0 +1,261 @@
+name: Release Glace
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-14
+    env:
+      APP_NAME: Glace
+      PROJECT_PATH: Ice.xcodeproj
+      SCHEME: Ice
+      DERIVED_DATA_PATH: ${{ runner.temp }}/GlaceDerivedData
+      ARCHIVE_PATH: ${{ runner.temp }}/Glace.xcarchive
+      EXPORT_PATH: ${{ runner.temp }}/GlaceExport
+      PAGES_PATH: ${{ github.workspace }}/gh-pages
+      PAGES_UPDATES_PATH: ${{ github.workspace }}/gh-pages/updates
+      PAGES_BASE_URL: https://scorpion7slayer.github.io/Glace/updates
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release secrets
+        env:
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          required=(
+            APPLE_APP_SPECIFIC_PASSWORD
+            APPLE_ID
+            APPLE_TEAM_ID
+            MACOS_CERTIFICATE_P12_BASE64
+            MACOS_CERTIFICATE_PASSWORD
+            MACOS_KEYCHAIN_PASSWORD
+            SPARKLE_PRIVATE_KEY
+          )
+          for name in "${required[@]}"; do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+
+      - name: Prepare scripts
+        run: |
+          chmod +x scripts/create_dmg.sh
+          chmod +x scripts/render_release_notes.py
+
+      - name: Derive release version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          MARKETING_VERSION="${RELEASE_TAG#v}"
+          if [ -z "$MARKETING_VERSION" ]; then
+            echo "Release tag must not be empty" >&2
+            exit 1
+          fi
+          echo "MARKETING_VERSION=$MARKETING_VERSION" >> "$GITHUB_ENV"
+          echo "CURRENT_PROJECT_VERSION=${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+
+      - name: Import Developer ID certificate
+        env:
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          CERT_PATH="$RUNNER_TEMP/build_certificate.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          export CERT_PATH
+
+          python3 - <<'PY'
+          import base64
+          import os
+          import pathlib
+
+          certificate = os.environ["MACOS_CERTIFICATE_P12_BASE64"]
+          pathlib.Path(os.environ["CERT_PATH"]).write_bytes(base64.b64decode(certificate))
+          PY
+
+          security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$MACOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$MACOS_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" login.keychain-db
+          security default-keychain -d user -s "$KEYCHAIN_PATH"
+          security find-identity -v -p codesigning "$KEYCHAIN_PATH"
+
+      - name: Archive Glace
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project "$PROJECT_PATH" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -derivedDataPath "$DERIVED_DATA_PATH" \
+            -archivePath "$ARCHIVE_PATH" \
+            -destination 'generic/platform=macOS' \
+            ARCHS='arm64 x86_64' \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY='Developer ID Application' \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$CURRENT_PROJECT_VERSION" \
+            archive
+
+      - name: Export signed app
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          EXPORT_OPTIONS_PLIST="$RUNNER_TEMP/ExportOptions.plist"
+          cat > "$EXPORT_OPTIONS_PLIST" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>destination</key>
+              <string>export</string>
+              <key>method</key>
+              <string>developer-id</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>stripSwiftSymbols</key>
+              <true/>
+              <key>teamID</key>
+              <string>${APPLE_TEAM_ID}</string>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist "$EXPORT_OPTIONS_PLIST"
+
+      - name: Collect release metadata
+        run: |
+          set -euo pipefail
+          APP_PATH="$EXPORT_PATH/$APP_NAME.app"
+          APP_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP_PATH/Contents/Info.plist")"
+          APP_BUILD="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP_PATH/Contents/Info.plist")"
+          DMG_NAME="${APP_NAME}-${APP_VERSION}.dmg"
+          DMG_PATH="$RUNNER_TEMP/$DMG_NAME"
+
+          {
+            echo "APP_PATH=$APP_PATH"
+            echo "APP_VERSION=$APP_VERSION"
+            echo "APP_BUILD=$APP_BUILD"
+            echo "DMG_NAME=$DMG_NAME"
+            echo "DMG_PATH=$DMG_PATH"
+          } >> "$GITHUB_ENV"
+
+      - name: Create signed DMG
+        run: |
+          set -euo pipefail
+          scripts/create_dmg.sh "$APP_PATH" "$DMG_PATH"
+          codesign --force --sign 'Developer ID Application' --timestamp "$DMG_PATH"
+          codesign --verify --verbose=2 "$DMG_PATH"
+
+      - name: Notarize DMG
+        env:
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          xcrun notarytool submit "$DMG_PATH" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait
+          xcrun stapler staple "$DMG_PATH"
+          spctl -a -t open --context context:primary-signature -v "$DMG_PATH"
+
+      - name: Restore gh-pages contents
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 1
+
+      - name: Prepare update feed workspace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ ! -d "$PAGES_PATH/.git" ]; then
+            mkdir -p "$PAGES_PATH"
+            cd "$PAGES_PATH"
+            git init
+            git checkout -b gh-pages
+            git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          fi
+          mkdir -p "$PAGES_UPDATES_PATH"
+          cp "$DMG_PATH" "$PAGES_UPDATES_PATH/$DMG_NAME"
+
+      - name: Render release notes
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          set -euo pipefail
+          RELEASE_NOTES_SOURCE="$RUNNER_TEMP/release-notes.md"
+          RELEASE_NOTES_OUTPUT="$PAGES_UPDATES_PATH/${DMG_NAME%.dmg}.html"
+          printf '%s' "${RELEASE_BODY:-}" > "$RELEASE_NOTES_SOURCE"
+          scripts/render_release_notes.py "$RELEASE_NOTES_SOURCE" "$RELEASE_NOTES_OUTPUT"
+
+      - name: Generate Sparkle appcast
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          SPARKLE_BIN_DIR="$DERIVED_DATA_PATH/SourcePackages/artifacts/sparkle/Sparkle/bin"
+          if [ ! -x "$SPARKLE_BIN_DIR/generate_appcast" ]; then
+            echo "Sparkle generate_appcast tool not found at $SPARKLE_BIN_DIR" >&2
+            exit 1
+          fi
+
+          printf '%s' "$SPARKLE_PRIVATE_KEY" | \
+            "$SPARKLE_BIN_DIR/generate_appcast" \
+              --ed-key-file - \
+              --download-url-prefix "$PAGES_BASE_URL/" \
+              --release-notes-url-prefix "$PAGES_BASE_URL/" \
+              "$PAGES_UPDATES_PATH"
+
+      - name: Publish appcast to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "$PAGES_PATH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add updates
+          git commit -m "Publish Glace ${APP_VERSION} (${APP_BUILD})" || echo "No appcast changes to commit"
+          git push origin gh-pages
+
+      - name: Upload DMG to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.DMG_PATH }}

@@ -111,15 +111,15 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var iceIconOptions: some View {
-        Toggle("Show Ice icon", isOn: manager.bindings.showIceIcon)
+        Toggle("Show Glace icon", isOn: manager.bindings.showIceIcon)
             .annotation {
                 if !manager.showIceIcon {
-                    Text("You can still access Ice's settings by right-clicking an empty area in the menu bar")
+                    Text("You can still access Glace's settings by right-clicking an empty area in the menu bar")
                 }
             }
         if manager.showIceIcon {
-            IceMenu("Ice icon") {
-                Picker("Ice icon", selection: manager.bindings.iceIcon) {
+            IceMenu("Glace icon") {
+                Picker("Glace icon", selection: manager.bindings.iceIcon) {
                     ForEach(ControlItemImageSet.userSelectableIceIcons) { imageSet in
                         Button {
                             manager.iceIcon = imageSet
@@ -183,7 +183,7 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var useIceBar: some View {
-        Toggle("Use Ice Bar", isOn: manager.bindings.useIceBar)
+        Toggle("Use Glace Bar", isOn: manager.bindings.useIceBar)
             .annotation("Show hidden menu bar items in a separate bar below the menu bar")
     }
 
@@ -197,11 +197,11 @@ struct GeneralSettingsPane: View {
         .annotation {
             switch manager.iceBarLocation {
             case .dynamic:
-                Text("The Ice Bar's location changes based on context")
+                Text("The Glace Bar's location changes based on context")
             case .mousePointer:
-                Text("The Ice Bar is centered below the mouse pointer")
+                Text("The Glace Bar is centered below the mouse pointer")
             case .iceIcon:
-                Text("The Ice Bar is centered below the Ice icon")
+                Text("The Glace Bar is centered below the Glace icon")
             }
         }
     }
@@ -258,10 +258,7 @@ struct GeneralSettingsPane: View {
                     .disabled(isApplyingOffset || !isActualOffsetDifferentFromDefault)
                 }
             } label: {
-                HStack {
-                    Text("Menu bar item spacing")
-                    BetaBadge()
-                }
+                Text("Menu bar item spacing")
             }
         }
         .annotation(

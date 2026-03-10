@@ -242,7 +242,7 @@ extension MigrationManager {
             }
 
             let alert = NSAlert()
-            alert.messageText = "Due to a bug in the 0.10.0 release, the data for Ice's menu bar items was corrupted and their positions had to be reset."
+            alert.messageText = "Due to a bug in the 0.10.0 release, the data for Glace's menu bar items was corrupted and their positions had to be reset."
             alert.informativeText = "Our sincerest apologies for the inconvenience."
 
             return .successButShowAlert(alert)

@@ -182,7 +182,12 @@ extension MenuBarItem {
         }
         if activeSpaceOnly {
             option.insert(.activeSpace)
-            titlePredicate = { $0.title != "" }
+            // Some macOS versions intermittently omit the window title for this app's status
+            // items while still reporting them on the active space. Keep our own items so
+            // section delimiters remain discoverable.
+            titlePredicate = { item in
+                item.title != "" || item.owningApplication == .current
+            }
         }
         if let display {
             let displayBounds = CGDisplayBounds(display)
@@ -226,15 +231,18 @@ private extension MenuBarItemInfo {
     /// it is a valid menu bar item window. Only call this initializer if you are
     /// certain that the window is valid.
     init(uncheckedItemWindow itemWindow: WindowInfo) {
+        let title = itemWindow.title ?? ""
+
+        if let controlItemInfo = Self.controlItemInfo(for: title) {
+            self = controlItemInfo
+            return
+        }
+
         if let bundleIdentifier = itemWindow.owningApplication?.bundleIdentifier {
             self.namespace = Namespace(bundleIdentifier)
         } else {
             self.namespace = .null
         }
-        if let title = itemWindow.title {
-            self.title = title
-        } else {
-            self.title = ""
-        }
+        self.title = title
     }
 }

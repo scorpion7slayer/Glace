@@ -25,7 +25,7 @@ final class IceBarPanel: NSPanel {
             defer: false
         )
         self.appState = appState
-        self.title = "Ice Bar"
+        self.title = "Glace Bar"
         self.titlebarAppearsTransparent = true
         self.isMovableByWindowBackground = true
         self.allowsToolTipsWhenApplicationIsInactive = true
@@ -67,7 +67,7 @@ final class IceBarPanel: NSPanel {
                         // Only continue if the menu bar is automatically hidden, as Ice
                         // can't currently display its menu bar items.
                         appState.menuBarManager.isMenuBarHiddenBySystemUserDefaults,
-                        let info = window.flatMap({ WindowInfo(windowID: CGWindowID($0.windowNumber)) }),
+                        let info = window?.cgWindowID.flatMap({ WindowInfo(windowID: $0) }),
                         // Window being offscreen means the menu bar is currently hidden.
                         // Close the bar, as things will start to look weird if we don't.
                         !info.isOnScreen
@@ -136,10 +136,10 @@ final class IceBarPanel: NSPanel {
                 guard
                     lowerBound <= upperBound,
                     let section = appState.menuBarManager.section(withName: .visible),
-                    let windowID = section.controlItem.windowID,
-                    // Bridging.getWindowFrame is more reliable than ControlItem.windowFrame,
-                    // i.e. if the control item is offscreen.
-                    let itemFrame = Bridging.getWindowFrame(for: windowID)
+                    // Accessing the status item window ID can trap while AppKit is still
+                    // materializing the menu bar button during the initial click. Using the
+                    // cached frame avoids that crash and still gives us a stable anchor point.
+                    let itemFrame = section.controlItem.windowFrame ?? section.controlItem.window?.frame
                 else {
                     return originForRightOfScreen
                 }
@@ -310,21 +310,21 @@ private struct IceBarContentView: View {
     private var content: some View {
         if !ScreenCapture.cachedCheckPermissions() {
             HStack {
-                Text("The Ice Bar requires screen recording permissions.")
+                Text("The Glace Bar requires screen recording permissions.")
 
                 Button {
                     closePanel()
                     appState.navigationState.settingsNavigationIdentifier = .advanced
                     appState.appDelegate?.openSettingsWindow()
                 } label: {
-                    Text("Open Ice Settings")
+                    Text("Open Glace Settings")
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.link)
             }
             .padding(.horizontal, 10)
         } else if menuBarManager.isMenuBarHiddenBySystemUserDefaults {
-            Text("Ice cannot display menu bar items for automatically hidden menu bars")
+            Text("Glace cannot display menu bar items for automatically hidden menu bars")
                 .padding(.horizontal, 10)
         } else if imageCache.cacheFailed(for: section) {
             Text("Unable to display menu bar items")
@@ -384,7 +384,7 @@ private struct IceBarItemView: View {
 
     private var image: NSImage? {
         guard
-            let image = imageCache.images[item.info],
+            let image = imageCache.images[item.windowID],
             let screen = imageCache.screen
         else {
             return nil

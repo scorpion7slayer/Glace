@@ -9,6 +9,12 @@ import SwiftUI
 /// Manager for app updates.
 @MainActor
 final class UpdatesManager: NSObject, ObservableObject {
+    /// The repository page for Glace releases.
+    private static let releasesURL: URL = {
+        // swiftlint:disable:next force_unwrapping
+        URL(string: "https://github.com/scorpion7slayer/Glace/releases/latest")!
+    }()
+
     /// A Boolean value that indicates whether the user can check for updates.
     @Published var canCheckForUpdates = false
 
@@ -74,20 +80,11 @@ final class UpdatesManager: NSObject, ObservableObject {
 
     /// Checks for app updates.
     @objc func checkForUpdates() {
-        #if DEBUG
-        // Checking for updates hangs in debug mode.
-        let alert = NSAlert()
-        alert.messageText = "Checking for updates is not supported in debug mode."
-        alert.runModal()
-        #else
-        guard let appState else {
-            return
+        if canCheckForUpdates {
+            updater.checkForUpdates()
+        } else {
+            NSWorkspace.shared.open(Self.releasesURL)
         }
-        // Activate the app in case an alert needs to be displayed.
-        appState.activate(withPolicy: .regular)
-        appState.openSettingsWindow()
-        updater.checkForUpdates()
-        #endif
     }
 }
 

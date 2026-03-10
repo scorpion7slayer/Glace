@@ -41,11 +41,19 @@ final class MenuBarItemManager: ObservableObject {
                     return false
                 }
 
+                // Control items are only UI delimiters. The Glace icon should only appear
+                // in the visible section, never in the hidden bars.
+                switch item.info {
+                case .iceIcon:
+                    return section == .visible
+                case .hiddenControlItem, .alwaysHiddenControlItem:
+                    return false
+                default:
+                    break
+                }
+
                 if item.owningApplication == .current {
-                    // Ice icon is the only item owned by Ice that should be included.
-                    guard item.title == ControlItem.Identifier.iceIcon.rawValue else {
-                        return false
-                    }
+                    return false
                 }
 
                 return true
@@ -54,7 +62,7 @@ final class MenuBarItemManager: ObservableObject {
 
         /// Returns the name of the section for the given menu bar item.
         func section(for item: MenuBarItem) -> MenuBarSection.Name? {
-            for (section, items) in self.items where items.contains(where: { $0.info == item.info }) {
+            for (section, items) in self.items where items.contains(where: { $0.windowID == item.windowID }) {
                 return section
             }
             return nil
@@ -69,8 +77,8 @@ final class MenuBarItemManager: ObservableObject {
 
     /// Context for a temporarily shown menu bar item.
     private struct TempShownItemContext {
-        /// The information associated with the item.
-        let info: MenuBarItemInfo
+        /// The window identifier associated with the item.
+        let windowID: CGWindowID
 
         /// The destination to return the item to.
         let returnDestination: MoveDestination
@@ -227,6 +235,46 @@ final class MenuBarItemManager: ObservableObject {
 // MARK: - Cache Items
 
 extension MenuBarItemManager {
+    /// Returns the cached AppKit frame for the given control item section.
+    private func controlItemFrame(for sectionName: MenuBarSection.Name) -> CGRect? {
+        appState?
+            .menuBarManager
+            .section(withName: sectionName)?
+            .controlItem
+            .windowFrame
+    }
+
+    /// Removes the menu bar item that backs the given control item from the array.
+    ///
+    /// Matching by `windowID` is more reliable than matching by title because AppKit can
+    /// momentarily report empty titles for this app's status items.
+    private func removeControlItem(
+        from items: inout [MenuBarItem],
+        sectionName: MenuBarSection.Name,
+        fallbackInfo: MenuBarItemInfo
+    ) -> MenuBarItem? {
+        let controlItem = appState?
+            .menuBarManager
+            .section(withName: sectionName)?
+            .controlItem
+
+        if
+            let windowID = controlItem?.windowID,
+            let index = items.firstIndex(where: { $0.windowID == windowID })
+        {
+            return items.remove(at: index)
+        }
+
+        if
+            let windowFrame = controlItem?.windowFrame,
+            let index = items.firstIndex(where: { $0.frame.equalTo(windowFrame) })
+        {
+            return items.remove(at: index)
+        }
+
+        return items.firstIndex(matching: fallbackInfo).map { items.remove(at: $0) }
+    }
+
     /// Logs a warning that the given menu bar item was not added to the cache.
     private func logNotCachedWarning(for item: MenuBarItem) {
         Logger.itemManager.warning("\(item.logString) was not cached")
@@ -242,20 +290,107 @@ extension MenuBarItemManager {
     private func uncheckedCacheItems(
         hiddenControlItem: MenuBarItem,
         alwaysHiddenControlItem: MenuBarItem?,
+        orderedItems: [MenuBarItem]
+    ) {
+        guard let hiddenControlIndex = orderedItems.firstIndex(where: { $0.windowID == hiddenControlItem.windowID }) else {
+            uncheckedCacheItems(
+                hiddenControlFrame: hiddenControlItem.frame,
+                alwaysHiddenControlFrame: alwaysHiddenControlItem?.frame,
+                otherItems: orderedItems.filter {
+                    $0.info != .hiddenControlItem && $0.info != .alwaysHiddenControlItem
+                }
+            )
+            return
+        }
+
+        let alwaysHiddenControlIndex = alwaysHiddenControlItem.flatMap { alwaysHiddenControlItem in
+            orderedItems.firstIndex(where: { $0.windowID == alwaysHiddenControlItem.windowID })
+        }
+
+        Logger.itemManager.debug("Caching menu bar items")
+
+        var cache = ItemCache()
+        var tempShownItems = [(MenuBarItem, MoveDestination)]()
+
+        for (index, item) in orderedItems.enumerated() {
+            switch item.info {
+            case .hiddenControlItem, .alwaysHiddenControlItem:
+                continue
+            default:
+                break
+            }
+
+            if let context = tempShownItemContexts.first(where: { $0.windowID == item.windowID }) {
+                tempShownItems.append((item, context.returnDestination))
+            } else if index > hiddenControlIndex {
+                cache[.visible].append(item)
+            } else if let alwaysHiddenControlIndex {
+                if index > alwaysHiddenControlIndex {
+                    cache[.hidden].append(item)
+                } else {
+                    cache[.alwaysHidden].append(item)
+                }
+            } else {
+                cache[.hidden].append(item)
+            }
+        }
+
+        for (item, destination) in tempShownItems {
+            switch destination {
+            case .leftOfItem(let targetItem):
+                switch targetItem.info {
+                case .hiddenControlItem:
+                    cache[.hidden].append(item)
+                case .alwaysHiddenControlItem:
+                    cache[.alwaysHidden].append(item)
+                default:
+                    if
+                        let section = cache.section(for: targetItem),
+                        let index = cache[section].firstIndex(where: { $0.windowID == targetItem.windowID })
+                    {
+                        let clampedIndex = index.clamped(to: cache[section].startIndex...cache[section].endIndex)
+                        cache[section].insert(item, at: clampedIndex)
+                    }
+                }
+            case .rightOfItem(let targetItem):
+                switch targetItem.info {
+                case .hiddenControlItem:
+                    cache[.visible].insert(item, at: 0)
+                case .alwaysHiddenControlItem:
+                    cache[.hidden].insert(item, at: 0)
+                default:
+                    if
+                        let section = cache.section(for: targetItem),
+                        let index = cache[section].firstIndex(where: { $0.windowID == targetItem.windowID })
+                    {
+                        let clampedIndex = (index - 1).clamped(to: cache[section].startIndex...cache[section].endIndex)
+                        cache[section].insert(item, at: clampedIndex)
+                    }
+                }
+            }
+        }
+
+        itemCache = cache
+    }
+
+    /// Caches the given menu bar items using known control item frames.
+    private func uncheckedCacheItems(
+        hiddenControlFrame: CGRect,
+        alwaysHiddenControlFrame: CGRect?,
         otherItems: [MenuBarItem]
     ) {
         Logger.itemManager.debug("Caching menu bar items")
 
         let predicates = Predicates.sectionPredicates(
-            hiddenControlItem: hiddenControlItem,
-            alwaysHiddenControlItem: alwaysHiddenControlItem
+            hiddenControlFrame: hiddenControlFrame,
+            alwaysHiddenControlFrame: alwaysHiddenControlFrame
         )
 
         var cache = ItemCache()
         var tempShownItems = [(MenuBarItem, MoveDestination)]()
 
         for item in otherItems {
-            if let context = tempShownItemContexts.first(where: { $0.info == item.info }) {
+            if let context = tempShownItemContexts.first(where: { $0.windowID == item.windowID }) {
                 // Keep track of temporarily shown items and their return destinations separately.
                 // We want to cache them as if they were in their original locations. Once all other
                 // items are cached, use the return destinations to insert the items into the cache
@@ -283,7 +418,7 @@ extension MenuBarItemManager {
                 default:
                     if
                         let section = cache.section(for: targetItem),
-                        let index = cache[section].firstIndex(matching: targetItem.info)
+                        let index = cache[section].firstIndex(where: { $0.windowID == targetItem.windowID })
                     {
                         let clampedIndex = index.clamped(to: cache[section].startIndex...cache[section].endIndex)
                         cache[section].insert(item, at: clampedIndex)
@@ -298,7 +433,7 @@ extension MenuBarItemManager {
                 default:
                     if
                         let section = cache.section(for: targetItem),
-                        let index = cache[section].firstIndex(matching: targetItem.info)
+                        let index = cache[section].firstIndex(where: { $0.windowID == targetItem.windowID })
                     {
                         let clampedIndex = (index - 1).clamped(to: cache[section].startIndex...cache[section].endIndex)
                         cache[section].insert(item, at: clampedIndex)
@@ -333,12 +468,21 @@ extension MenuBarItemManager {
             cachedItemWindowIDs = itemWindowIDs
         }
 
-        var items = MenuBarItem.getMenuBarItems(onScreenOnly: false, activeSpaceOnly: true)
+        let orderedItems = MenuBarItem.getMenuBarItems(onScreenOnly: false, activeSpaceOnly: true)
+        var items = orderedItems
 
-        let hiddenControlItem = items.firstIndex(matching: .hiddenControlItem).map { items.remove(at: $0) }
-        let alwaysHiddenControlItem = items.firstIndex(matching: .alwaysHiddenControlItem).map { items.remove(at: $0) }
+        let hiddenControlItem = removeControlItem(
+            from: &items,
+            sectionName: .hidden,
+            fallbackInfo: .hiddenControlItem
+        )
+        let alwaysHiddenControlItem = removeControlItem(
+            from: &items,
+            sectionName: .alwaysHidden,
+            fallbackInfo: .alwaysHiddenControlItem
+        )
 
-        guard let hiddenControlItem else {
+        guard let hiddenControlFrame = hiddenControlItem?.frame ?? controlItemFrame(for: .hidden) else {
             Logger.itemManager.warning("Missing control item for hidden section")
             Logger.itemManager.debug("Clearing menu bar item cache")
             itemCache.clear()
@@ -346,17 +490,30 @@ extension MenuBarItemManager {
         }
 
         do {
-            if let alwaysHiddenControlItem {
+            if let hiddenControlItem, let alwaysHiddenControlItem {
                 try await enforceControlItemOrder(
                     hiddenControlItem: hiddenControlItem,
                     alwaysHiddenControlItem: alwaysHiddenControlItem
                 )
+                uncheckedCacheItems(
+                    hiddenControlItem: hiddenControlItem,
+                    alwaysHiddenControlItem: alwaysHiddenControlItem,
+                    orderedItems: orderedItems
+                )
+            } else if hiddenControlItem == nil {
+                Logger.itemManager.debug("Using AppKit frame fallback for hidden control item")
+                uncheckedCacheItems(
+                    hiddenControlFrame: hiddenControlFrame,
+                    alwaysHiddenControlFrame: alwaysHiddenControlItem?.frame ?? controlItemFrame(for: .alwaysHidden),
+                    otherItems: items
+                )
+            } else if let hiddenControlItem {
+                uncheckedCacheItems(
+                    hiddenControlItem: hiddenControlItem,
+                    alwaysHiddenControlItem: alwaysHiddenControlItem,
+                    orderedItems: orderedItems
+                )
             }
-            uncheckedCacheItems(
-                hiddenControlItem: hiddenControlItem,
-                alwaysHiddenControlItem: alwaysHiddenControlItem,
-                otherItems: items
-            )
         } catch {
             Logger.itemManager.error("Error enforcing control item order: \(error)")
             Logger.itemManager.debug("Clearing menu bar item cache")
@@ -1258,8 +1415,7 @@ extension MenuBarItemManager {
 extension MenuBarItemManager {
     /// Gets the destination to return the given item to after it is temporarily shown.
     private func getReturnDestination(for item: MenuBarItem, in items: [MenuBarItem]) -> MoveDestination? {
-        let info = item.info
-        if let index = items.firstIndex(where: { $0.info == info }) {
+        if let index = items.firstIndex(where: { $0.windowID == item.windowID }) {
             if items.indices.contains(index + 1) {
                 return .leftOfItem(items[index + 1])
             } else if items.indices.contains(index - 1) {
@@ -1385,7 +1541,7 @@ extension MenuBarItemManager {
             }
 
             let context = TempShownItemContext(
-                info: item.info,
+                windowID: item.windowID,
                 returnDestination: destination,
                 shownInterfaceWindow: shownInterfaceWindow
             )
@@ -1432,7 +1588,7 @@ extension MenuBarItemManager {
         }
 
         while let context = tempShownItemContexts.popLast() {
-            guard let item = items.first(where: { $0.info == context.info }) else {
+            guard let item = items.first(where: { $0.windowID == context.windowID }) else {
                 continue
             }
             do {
@@ -1456,8 +1612,8 @@ extension MenuBarItemManager {
     /// Removes a temporarily shown item from the cache.
     ///
     /// This ensures that the item will _not_ be returned to its previous location.
-    func removeTempShownItemFromCache(with info: MenuBarItemInfo) {
-        tempShownItemContexts.removeAll { $0.info == info }
+    func removeTempShownItemFromCache(for item: MenuBarItem) {
+        tempShownItemContexts.removeAll { $0.windowID == item.windowID }
     }
 }
 

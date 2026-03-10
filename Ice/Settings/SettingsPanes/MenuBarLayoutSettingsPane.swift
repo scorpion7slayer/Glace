@@ -51,7 +51,7 @@ struct MenuBarLayoutSettingsPane: View {
 
     @ViewBuilder
     private var cannotArrange: some View {
-        Text("Ice cannot arrange menu bar items in automatically hidden menu bars")
+        Text("Glace cannot arrange menu bar items in automatically hidden menu bars")
             .font(.title3)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }

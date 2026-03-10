@@ -206,6 +206,8 @@ final class AppState: ObservableObject {
             Logger.appState.warning("Window \(window.identifier?.rawValue ?? "<NIL>") is not the settings window!")
             return
         }
+        window.hidesOnDeactivate = false
+        window.isReleasedWhenClosed = false
         settingsWindow = window
         configureCancellables()
     }

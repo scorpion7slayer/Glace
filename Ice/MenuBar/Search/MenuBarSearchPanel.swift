@@ -357,7 +357,7 @@ private struct SettingsButton: View {
 
     var body: some View {
         BottomBarButton(action: action) {
-            Image(.iceCubeStroke)
+            Image(.iceCreamClosed)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 18, height: 18)
@@ -409,7 +409,7 @@ private struct MenuBarSearchItemView: View {
 
     private var image: NSImage? {
         guard
-            let image = imageCache.images[item.info]?.trimmingTransparentPixels(around: [.minXEdge, .maxXEdge]),
+            let image = imageCache.images[item.windowID]?.trimmingTransparentPixels(around: [.minXEdge, .maxXEdge]),
             let screen = imageCache.screen
         else {
             return nil
