@@ -1,6 +1,9 @@
 name: Release Glace
 
 on:
+  push:
+    tags:
+      - 'v*'
   release:
     types:
       - published
@@ -80,7 +83,7 @@ jobs:
 
       - name: Derive release version
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag || github.ref_name }}
         run: |
           set -euo pipefail
           MARKETING_VERSION="${RELEASE_TAG#v}"
@@ -236,7 +239,7 @@ jobs:
 
       - name: Render release notes
         env:
-          RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_BODY: ${{ github.event.release.body || '' }}
         run: |
           set -euo pipefail
           RELEASE_NOTES_SOURCE="$RUNNER_TEMP/release-notes.md"
