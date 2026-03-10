@@ -34,6 +34,34 @@ final class MenuBarItemImageCache: ObservableObject {
         configureCancellables()
     }
 
+    /// A Boolean value that indicates whether automatic cache refreshes are currently useful.
+    @MainActor
+    private var shouldAutoRefreshCache: Bool {
+        guard let appState else {
+            return false
+        }
+
+        let navigationState = appState.navigationState
+        if navigationState.isIceBarPresented || navigationState.isSearchPresented {
+            return true
+        }
+
+        return navigationState.isSettingsPresented
+            && navigationState.settingsNavigationIdentifier == .menuBarLayout
+    }
+
+    /// Clears the cached images when no UI currently depends on them.
+    @MainActor
+    private func clearCacheIfNeeded() {
+        guard !images.isEmpty || screen != nil || menuBarHeight != nil else {
+            return
+        }
+
+        images.removeAll(keepingCapacity: false)
+        screen = nil
+        menuBarHeight = nil
+    }
+
     /// Configures the internal observers for the cache.
     @MainActor
     private func configureCancellables() {
@@ -62,7 +90,13 @@ final class MenuBarItemImageCache: ObservableObject {
                 guard let self else {
                     return
                 }
-                Task.detached {
+
+                guard self.shouldAutoRefreshCache else {
+                    self.clearCacheIfNeeded()
+                    return
+                }
+
+                Task(priority: .utility) {
                     if ScreenCapture.cachedCheckPermissions() {
                         await self.updateCache()
                     }
@@ -271,6 +305,13 @@ final class MenuBarItemImageCache: ObservableObject {
             let section = await appState.menuBarManager.iceBarPanel.currentSection
         {
             sectionsNeedingDisplay.append(section)
+        }
+
+        guard !sectionsNeedingDisplay.isEmpty else {
+            await MainActor.run {
+                self.clearCacheIfNeeded()
+            }
+            return
         }
 
         await updateCache(sections: sectionsNeedingDisplay)

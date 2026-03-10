@@ -60,19 +60,25 @@ class Permission: ObservableObject, Identifiable {
         self.check = check
         self.request = request
         self.hasPermission = check()
-        configureCancellables()
     }
 
-    /// Sets up the internal observers for the permission.
-    private func configureCancellables() {
+    /// Refreshes the current permission state.
+    func refreshPermissionState() {
+        hasPermission = check()
+    }
+
+    /// Starts polling the permission state.
+    func startCheck() {
+        refreshPermissionState()
+
+        guard timerCancellable == nil else {
+            return
+        }
+
         timerCancellable = Timer.publish(every: 1, on: .main, in: .default)
             .autoconnect()
-            .merge(with: Just(.now))
             .sink { [weak self] _ in
-                guard let self else {
-                    return
-                }
-                hasPermission = check()
+                self?.refreshPermissionState()
             }
     }
 
@@ -86,7 +92,7 @@ class Permission: ObservableObject, Identifiable {
 
     /// Asynchronously waits for the app to be granted this permission.
     func waitForPermission() async {
-        configureCancellables()
+        startCheck()
         guard !hasPermission else {
             return
         }

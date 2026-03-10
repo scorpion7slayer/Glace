@@ -327,7 +327,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.11.13;
+				MARKETING_VERSION = 0.11.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.theo.Glace;
 				PRODUCT_NAME = Glace;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -362,7 +362,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.11.13;
+				MARKETING_VERSION = 0.11.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.theo.Glace;
 				PRODUCT_NAME = Glace;
 				SWIFT_EMIT_LOC_STRINGS = YES;

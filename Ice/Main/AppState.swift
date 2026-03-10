@@ -133,19 +133,36 @@ final class AppState: ObservableObject {
             Logger.appState.warning("No settings window!")
         }
 
+        if let permissionsWindow {
+            permissionsWindow.publisher(for: \.isVisible)
+                .debounce(for: 0.05, scheduler: DispatchQueue.main)
+                .sink { [weak self] isVisible in
+                    guard let self else {
+                        return
+                    }
+                    if isVisible {
+                        permissionsManager.startAllChecks()
+                    } else {
+                        permissionsManager.stopAllChecks()
+                    }
+                }
+                .store(in: &c)
+        }
+
         Publishers.Merge(
-            navigationState.$isAppFrontmost,
-            navigationState.$isSettingsPresented
+            navigationState.$isSettingsPresented.mapToVoid(),
+            navigationState.$settingsNavigationIdentifier.mapToVoid()
         )
         .debounce(for: 0.1, scheduler: DispatchQueue.main)
-        .sink { [weak self] shouldUpdate in
+        .sink { [weak self] in
             guard
                 let self,
-                shouldUpdate
+                navigationState.isSettingsPresented,
+                navigationState.settingsNavigationIdentifier == .menuBarLayout
             else {
                 return
             }
-            Task.detached {
+            Task(priority: .utility) {
                 if ScreenCapture.cachedCheckPermissions(reset: true) {
                     await self.imageCache.updateCacheWithoutChecks(sections: MenuBarSection.Name.allCases)
                 }
@@ -219,6 +236,11 @@ final class AppState: ObservableObject {
             return
         }
         permissionsWindow = window
+        if window.isVisible {
+            permissionsManager.startAllChecks()
+        } else {
+            permissionsManager.stopAllChecks()
+        }
         configureCancellables()
     }
 

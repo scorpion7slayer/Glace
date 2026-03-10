@@ -30,7 +30,8 @@ final class IceBarColorManager: ObservableObject {
                     guard
                         let self,
                         let screen,
-                        screen == .main
+                        screen == .main,
+                        iceBarPanel.isVisible
                     else {
                         return
                     }
@@ -43,18 +44,23 @@ final class IceBarColorManager: ObservableObject {
                 iceBarPanel.publisher(for: \.isVisible)
             )
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] frame, isVisible in
-                guard
-                    let self,
-                    let screen = iceBarPanel.screen,
-                    isVisible,
-                    screen == .main
-                else {
-                    return
+                .sink { [weak self] frame, isVisible in
+                    guard let self else {
+                        return
+                    }
+
+                    guard
+                        let screen = iceBarPanel.screen,
+                        isVisible,
+                        screen == .main
+                    else {
+                        colorInfo = nil
+                        return
+                    }
+
+                    updateColorInfo(with: frame, screen: screen)
                 }
-                updateColorInfo(with: frame, screen: screen)
-            }
-            .store(in: &c)
+                .store(in: &c)
 
             Publishers.Merge4(
                 NSWorkspace.shared.notificationCenter
@@ -71,20 +77,21 @@ final class IceBarColorManager: ObservableObject {
                     .mapToVoid()
             )
             .receive(on: DispatchQueue.main)
-            .sink { [weak self, weak iceBarPanel] in
-                guard
-                    let self,
-                    let iceBarPanel,
-                    let screen = iceBarPanel.screen,
-                    screen == .main
-                else {
-                    return
-                }
-                updateWindowImage(for: screen)
-                if iceBarPanel.isVisible {
+                .sink { [weak self, weak iceBarPanel] in
+                    guard
+                        let self,
+                        let iceBarPanel,
+                        let screen = iceBarPanel.screen,
+                        iceBarPanel.isVisible,
+                        screen == .main
+                    else {
+                        self?.windowImage = nil
+                        self?.colorInfo = nil
+                        return
+                    }
+                    updateWindowImage(for: screen)
                     updateColorInfo(with: iceBarPanel.frame, screen: screen)
                 }
-            }
             .store(in: &c)
         }
 

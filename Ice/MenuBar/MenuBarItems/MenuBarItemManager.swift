@@ -177,6 +177,28 @@ final class MenuBarItemManager: ObservableObject {
         configureCancellables()
     }
 
+    /// A Boolean value that indicates whether automatic item cache refreshes are currently useful.
+    private var shouldAutoRefreshItemCache: Bool {
+        guard let appState else {
+            return false
+        }
+
+        let navigationState = appState.navigationState
+        if navigationState.isIceBarPresented || navigationState.isSearchPresented {
+            return true
+        }
+
+        if navigationState.isSettingsPresented, navigationState.settingsNavigationIdentifier == .menuBarLayout {
+            return true
+        }
+
+        if !tempShownItemContexts.isEmpty {
+            return true
+        }
+
+        return appState.menuBarManager.sections.contains(where: { $0.controlItem.state == .showItems })
+    }
+
     /// Configures the internal observers for the manager.
     private func configureCancellables() {
         var c = Set<AnyCancellable>()
@@ -185,7 +207,10 @@ final class MenuBarItemManager: ObservableObject {
             .autoconnect()
             .merge(with: Just(.now))
             .sink { [weak self] _ in
-                guard let self else {
+                guard
+                    let self,
+                    shouldAutoRefreshItemCache
+                else {
                     return
                 }
                 Task {
@@ -197,7 +222,10 @@ final class MenuBarItemManager: ObservableObject {
         NSWorkspace.shared.publisher(for: \.runningApplications)
             .delay(for: 0.25, scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                guard let self else {
+                guard
+                    let self,
+                    shouldAutoRefreshItemCache
+                else {
                     return
                 }
                 Task {

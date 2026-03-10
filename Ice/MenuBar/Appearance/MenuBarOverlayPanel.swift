@@ -78,6 +78,11 @@ final class MenuBarOverlayPanel: NSPanel {
     /// The screen that owns the panel.
     let owningScreen: NSScreen
 
+    /// A Boolean value that indicates whether periodic background refreshes are currently useful.
+    private var shouldPerformBackgroundUpdates: Bool {
+        isVisible || needsShow
+    }
+
     /// Creates an overlay panel with the given app state and owning screen.
     init(appState: AppState, owningScreen: NSScreen) {
         self.appState = appState
@@ -118,7 +123,10 @@ final class MenuBarOverlayPanel: NSPanel {
                 guard let self else {
                     return
                 }
-                updateTaskContext.setTask(for: .desktopWallpaper, timeout: .seconds(5)) {
+                guard self.shouldPerformBackgroundUpdates else {
+                    return
+                }
+                self.updateTaskContext.setTask(for: .desktopWallpaper, timeout: .seconds(5)) {
                     while true {
                         try Task.checkCancellation()
                         self.insertUpdateFlag(.desktopWallpaper)
@@ -194,14 +202,20 @@ final class MenuBarOverlayPanel: NSPanel {
         Timer.publish(every: 5, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.insertUpdateFlag(.desktopWallpaper)
+                guard let self, self.shouldPerformBackgroundUpdates else {
+                    return
+                }
+                self.insertUpdateFlag(.desktopWallpaper)
             }
             .store(in: &c)
 
         Timer.publish(every: 10, on: .main, in: .default)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.insertUpdateFlag(.applicationMenuFrame)
+                guard let self, self.shouldPerformBackgroundUpdates else {
+                    return
+                }
+                self.insertUpdateFlag(.applicationMenuFrame)
             }
             .store(in: &c)
 

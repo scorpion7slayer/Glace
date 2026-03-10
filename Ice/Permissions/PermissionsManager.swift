@@ -42,6 +42,7 @@ final class PermissionsManager: ObservableObject {
             screenRecordingPermission,
         ]
         configureCancellables()
+        updatePermissionsState()
     }
 
     private func configureCancellables() {
@@ -53,20 +54,29 @@ final class PermissionsManager: ObservableObject {
         )
         .receive(on: DispatchQueue.main)
         .sink { [weak self] in
-            guard let self else {
-                return
-            }
-            if allPermissions.allSatisfy({ $0.hasPermission }) {
-                permissionsState = .hasAllPermissions
-            } else if requiredPermissions.allSatisfy({ $0.hasPermission }) {
-                permissionsState = .hasRequiredPermissions
-            } else {
-                permissionsState = .missingPermissions
-            }
+            self?.updatePermissionsState()
         }
         .store(in: &c)
 
         cancellables = c
+    }
+
+    private func updatePermissionsState() {
+        if allPermissions.allSatisfy({ $0.hasPermission }) {
+            permissionsState = .hasAllPermissions
+        } else if requiredPermissions.allSatisfy({ $0.hasPermission }) {
+            permissionsState = .hasRequiredPermissions
+        } else {
+            permissionsState = .missingPermissions
+        }
+    }
+
+    /// Starts running all permission checks.
+    func startAllChecks() {
+        for permission in allPermissions {
+            permission.startCheck()
+        }
+        updatePermissionsState()
     }
 
     /// Stops running all permissions checks.
@@ -74,5 +84,9 @@ final class PermissionsManager: ObservableObject {
         for permission in allPermissions {
             permission.stopCheck()
         }
+        for permission in allPermissions {
+            permission.refreshPermissionState()
+        }
+        updatePermissionsState()
     }
 }
