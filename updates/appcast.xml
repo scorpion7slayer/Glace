@@ -3,6 +3,18 @@
     <channel>
         <title>Glace</title>
         <item>
+            <title>0.11.15</title>
+            <pubDate>Tue, 10 Mar 2026 21:56:09 +0000</pubDate>
+            <sparkle:version>7</sparkle:version>
+            <sparkle:shortVersionString>0.11.15</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://scorpion7slayer.github.io/Glace/updates/Glace-0.11.15.html</sparkle:releaseNotesLink>
+            <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace-0.11.15.dmg" length="3284332" type="application/octet-stream" sparkle:edSignature="DrJxueg45rC5Z4o7d8iqYghV867ZECKjtFvQPbs7AZjZGRyWqnkSFB4ewckMnGSR6gUUFXag8HVkSAaetHY6BA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace7-6.delta" sparkle:deltaFrom="6" length="259574" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864784" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="EMSDZeDuQyJmh9V1cRkg091AIv18ckicsI8Jqmd3rIP3L7d5uBmOyxObBQxua0qqDgSqdpfArURwWeJxi6xIAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>0.11.14</title>
             <pubDate>Tue, 10 Mar 2026 01:09:31 +0000</pubDate>
             <sparkle:version>6</sparkle:version>
