@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Glace</title>
+        <item>
+            <title>0.11.14</title>
+            <pubDate>Tue, 10 Mar 2026 01:09:31 +0000</pubDate>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>0.11.14</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://scorpion7slayer.github.io/Glace/updates/Glace-0.11.14.html</sparkle:releaseNotesLink>
+            <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace-0.11.14.dmg" length="3280200" type="application/octet-stream" sparkle:edSignature="QUuM9r4yOyXM+dgXXwd9lRUGlkQ8wLcYAuhw700z//+A43ZZBijAyaFAMnu+iE4r18SDRPJWOc8MY7lkI+1rAw=="/>
+        </item>
+    </channel>
+</rss>
