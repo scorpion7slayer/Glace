@@ -17,6 +17,11 @@ struct AboutSettingsPane: View {
 
     private var contributeURL: URL {
         // swiftlint:disable:next force_unwrapping
+        URL(string: "https://github.com/scorpion7slayer/Glace")!
+    }
+
+    private var originalProjectURL: URL {
+        // swiftlint:disable:next force_unwrapping
         URL(string: "https://github.com/jordanbaird/Ice")!
     }
 
@@ -145,7 +150,7 @@ struct AboutSettingsPane: View {
     @ViewBuilder
     private func bottomBar(containerShape: some InsettableShape) -> some View {
         HStack {
-            Button("Quit Ice") {
+            Button("Quit Glace") {
                 NSApp.terminate(nil)
             }
             Spacer()
@@ -158,7 +163,7 @@ struct AboutSettingsPane: View {
             Button("Report a Bug") {
                 openURL(issuesURL)
             }
-            Button("Support Ice", systemImage: "heart.circle.fill") {
+            Button("Support Glace", systemImage: "heart.circle.fill") {
                 openURL(donateURL)
             }
         }

@@ -13,6 +13,7 @@ struct ControlItemImageSet: Codable, Hashable, Identifiable {
         case door = "Door"
         case dot = "Dot"
         case ellipsis = "Ellipsis"
+        case iceCream = "Ice Cream"
         case iceCube = "Ice Cube"
         case sunglasses = "Sunglasses"
         case custom = "Custom"
@@ -69,6 +70,11 @@ extension ControlItemImageSet {
             name: .ellipsis,
             hidden: .catalog("EllipsisFill"),
             visible: .catalog("EllipsisStroke")
+        ),
+        ControlItemImageSet(
+            name: .iceCream,
+            hidden: .catalog("IceCreamClosed"),
+            visible: .catalog("IceCreamDropped")
         ),
         ControlItemImageSet(
             name: .iceCube,

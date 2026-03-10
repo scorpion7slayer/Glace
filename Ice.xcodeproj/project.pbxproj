@@ -145,8 +145,8 @@
 				7127A9FE2C4886D100D99DEF /* IfritStatic */,
 				71A065082E680C620087DB38 /* Semaphore */,
 			);
-			productName = Ice;
-			productReference = 7166832A2A767E6A006ABF84 /* Ice.app */;
+			productName = Glace;
+			productReference = 7166832A2A767E6A006ABF84 /* Glace.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7188A6822E27F9ED008F131D /* MenuBarItemService */ = {
