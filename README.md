@@ -1,112 +1,143 @@
 <div align="center">
-    <img src="Ice/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width=200 height=200>
-    <h1>Ice</h1>
+  <img src="Ice/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="180" height="180" alt="Glace icon">
+  <h1>Glace</h1>
+  <p><strong>A macOS menu bar manager focused on clarity, customization, and low overhead.</strong></p>
 </div>
 
-Ice is a powerful menu bar management tool. While its primary function is hiding and showing menu bar items, it aims to cover a wide variety of additional features to make it one of the most versatile menu bar tools available.
+> **This is a personal fork of [Ice](https://github.com/jordanbaird/Ice)** by Jordan Baird.
+> Glace keeps the core idea of Ice while introducing its own branding, release pipeline, fixes, and behavior changes.
 
-![Banner](https://github.com/user-attachments/assets/4423085c-4e4b-4f3d-ad0f-90a217c03470)
+[![Platform](https://img.shields.io/badge/platform-macOS-blue?style=flat-square)](https://www.apple.com/macos/)
+[![Requirements](https://img.shields.io/badge/requirements-macOS%2014%2B-fa4e49?style=flat-square)](https://www.apple.com/macos/)
+[![Download](https://img.shields.io/badge/download-latest-brightgreen?style=flat-square)](https://github.com/scorpion7slayer/Glace/releases/latest)
+[![License](https://img.shields.io/github/license/scorpion7slayer/Glace?style=flat-square)](LICENSE)
 
-[![Download](https://img.shields.io/badge/download-latest-brightgreen?style=flat-square)](https://github.com/jordanbaird/Ice/releases/latest)
-![Platform](https://img.shields.io/badge/platform-macOS-blue?style=flat-square)
-![Requirements](https://img.shields.io/badge/requirements-macOS%2014%2B-fa4e49?style=flat-square)
-[![Sponsor](https://img.shields.io/badge/Sponsor%20%E2%9D%A4%EF%B8%8F-8A2BE2?style=flat-square)](https://github.com/sponsors/jordanbaird)
-[![Website](https://img.shields.io/badge/Website-015FBA?style=flat-square)](https://icemenubar.app)
-[![License](https://img.shields.io/github/license/jordanbaird/Ice?style=flat-square)](LICENSE)
+## Custom Additions
 
-> [!NOTE]
-> Ice is currently in active development. Some features have not yet been implemented. Download the latest release [here](https://github.com/jordanbaird/Ice/releases/latest) and see the roadmap below for upcoming features.
+### Rebranding
 
-<a href="https://www.buymeacoffee.com/jordanbaird" target="_blank">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;">
-</a>
+- **Full Ice to Glace rebrand** across the app name, display name, settings UI, About screen, and release flow
+- **Custom ice cream identity** with a new app icon and a dedicated Glace menu bar icon style
+- **Fork-specific update pipeline** wired to the `scorpion7slayer/Glace` repository instead of the original Ice infrastructure
 
-## Install
+### Glace Bar and Interaction Fixes
 
-### Manual Installation
+- **Stability fixes for Glace Bar** when opening hidden menu bar items from the control icon
+- **Improved hidden item rendering** so the separate bar reliably shows the correct menu bar item icons
+- **Safer menu bar item tracking** using stable window IDs instead of weaker item metadata matches
+- **Better temporary item handling** when clicking hidden menu bar items or moving them between sections
 
-Download the "Ice.zip" file from the [latest release](https://github.com/jordanbaird/Ice/releases/latest) and move the unzipped app into your `Applications` folder.
+### Permissions and App Behavior
 
-### Homebrew
+- **Independent app identity** with its own bundle identifier for cleaner macOS permission handling
+- **Settings window persistence improvements** so clicking outside the settings window does not immediately dismiss it
+- **Clearer About page credits** showing Glace as a fork of Ice and crediting Jordan Baird
 
-Install Ice using the following command:
+### Performance Work
 
-```sh
-brew install --cask jordanbaird-ice
+- **Reduced idle CPU work** by avoiding unnecessary menu bar scans when Glace UI is not active
+- **Lower memory usage** by clearing image caches when Glace Bar, search, and layout UI are not visible
+- **Less background polling** for permissions, overlay refreshes, and menu bar color/image capture
+
+---
+
+Glace helps you organize and customize the macOS menu bar.
+
+Its main job is still the same as Ice: letting you hide, show, and rearrange menu bar items. On top of that, Glace includes a separate hidden-items bar, menu bar appearance tools, search, hotkeys, and release automation tailored for this fork.
+
+## What Glace Does
+
+1. **Separates** visible, hidden, and always-hidden menu bar items
+2. **Lets you reveal** hidden items by click, hover, scroll, hotkeys, or Glace Bar
+3. **Provides tools** to rearrange menu bar items visually
+4. **Customizes** menu bar appearance with tint, border, shadow, and shape options
+5. **Keeps the app lightweight** by reducing unnecessary background work whenever possible
+
+## Quick Start
+
+### Installation
+
+1. Download the latest release from the [releases page](https://github.com/scorpion7slayer/Glace/releases/latest)
+2. Move `Glace.app` into `/Applications`
+3. Launch Glace
+4. Grant the required macOS permissions
+5. Open Settings and configure your preferred menu bar layout
+
+### Required Permissions
+
+Glace may request:
+
+- **Accessibility** for real-time menu bar inspection and item management
+- **Screen Recording** for menu bar appearance editing and item image capture
+
+Without Screen Recording, Glace can still work in a more limited mode.
+
+## Features
+
+### Menu Bar Management
+
+- Hide menu bar items
+- Separate **hidden** and **always-hidden** sections
+- Show hidden items on click, hover, or scroll
+- Automatically rehide shown items
+- Search menu bar items
+- Display hidden items in a dedicated **Glace Bar**
+- Drag and drop menu bar items in the layout editor
+- Adjust menu bar item spacing
+
+### Appearance
+
+- Menu bar tint
+- Menu bar border
+- Menu bar shadow
+- Rounded and split menu bar shapes
+- Overlay-based appearance editing tools
+
+### Hotkeys and Utility
+
+- Toggle menu bar sections
+- Toggle Glace Bar
+- Open menu bar item search
+- Launch at login
+- Sparkle-based app updates for release builds
+
+## Current Focus
+
+Glace is an actively maintained fork, with current work focused on:
+
+- reliability of hidden item rendering
+- release and update infrastructure
+- lowering idle CPU and RAM usage
+- keeping the fork independent from upstream Ice branding and distribution
+
+## Development
+
+Glace is a native macOS app built with SwiftUI and AppKit integration.
+
+### Local Build
+
+Open the project in Xcode and run the `Ice` scheme, or build from the command line:
+
+```bash
+xcodebuild -project Ice.xcodeproj -scheme Ice -configuration Debug build
 ```
 
-## Features/Roadmap
+### Release Flow
 
-### Menu bar item management
+Tagged releases are built through GitHub Actions and published with Sparkle metadata for in-app updates.
 
-- [x] Hide menu bar items
-- [x] "Always-hidden" menu bar section
-- [x] Show hidden menu bar items when hovering over the menu bar
-- [x] Show hidden menu bar items when an empty area in the menu bar is clicked
-- [x] Show hidden menu bar items by scrolling or swiping in the menu bar
-- [x] Automatically rehide menu bar items
-- [x] Hide application menus when they overlap with shown menu bar items
-- [x] Drag and drop interface to arrange individual menu bar items
-- [x] Display hidden menu bar items in a separate bar (e.g. for MacBooks with the notch)
-- [x] Search menu bar items
-- [x] Menu bar item spacing (BETA)
-- [ ] Profiles for menu bar layout
-- [ ] Individual spacer items
-- [ ] Menu bar item groups
-- [ ] Show menu bar items when trigger conditions are met
+For release setup details, secrets, signing, notarization, and appcast publishing, see [RELEASING.md](RELEASING.md).
 
-### Menu bar appearance
+## Why macOS 14+?
 
-- [x] Menu bar tint (solid and gradient)
-- [x] Menu bar shadow
-- [x] Menu bar border
-- [x] Custom menu bar shapes (rounded and/or split)
-- [ ] Remove background behind menu bar
-- [ ] Rounded screen corners
-- [ ] Different settings for light/dark mode
+Glace depends on modern macOS APIs used for menu bar inspection, screen capture, and system integration. Because of that, this fork targets **macOS 14 and later**.
 
-### Hotkeys
+## Credits
 
-- [x] Toggle individual menu bar sections
-- [x] Show the search panel
-- [x] Enable/disable the Ice Bar
-- [x] Show/hide section divider icons
-- [x] Toggle application menus
-- [ ] Enable/disable auto rehide
-- [ ] Temporarily show individual menu bar items
-
-### Other
-
-- [x] Launch at login
-- [x] Automatic updates
-- [ ] Menu bar widgets
-
-## Why does Ice only support macOS 14 and later?
-
-Ice uses a number of system APIs that are available starting in macOS 14. As such, there are no plans to support earlier versions of macOS.
-
-## Gallery
-
-#### Show hidden menu bar items below the menu bar
-
-![Ice Bar](https://github.com/user-attachments/assets/f1429589-6186-4e1b-8aef-592219d49b9b)
-
-#### Drag-and-drop interface to arrange menu bar items
-
-![Menu Bar Layout](https://github.com/user-attachments/assets/095442ba-f2d0-4bb4-9632-91e26ef8d45b)
-
-#### Customize the menu bar's appearance
-
-![Menu Bar Appearance](https://github.com/user-attachments/assets/8c22c185-c3d2-49bb-971e-e1fc17df04b3)
-
-#### Menu bar item search
-
-![Menu Bar Item Search](https://github.com/user-attachments/assets/d1a7df3a-4989-4077-a0b1-8e7d5a1ba5b8)
-
-#### Custom menu bar item spacing
-
-![Menu Bar Item Spacing](https://github.com/user-attachments/assets/b196aa7e-184a-4d4c-b040-502f4aae40a6)
+- **Original project:** [Ice](https://github.com/jordanbaird/Ice)
+- **Original author:** [Jordan Baird](https://github.com/jordanbaird)
+- **Fork / Glace maintenance:** [scorpion7slayer](https://github.com/scorpion7slayer)
 
 ## License
 
-Ice is available under the [GPL-3.0 license](LICENSE).
+Glace is distributed under the [GPL-3.0 license](LICENSE).
