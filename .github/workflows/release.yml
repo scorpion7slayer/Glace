@@ -26,12 +26,12 @@ jobs:
       PAGES_BASE_URL: https://scorpion7slayer.github.io/Glace/updates
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 0
 
       - name: Select compatible Xcode
-        uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@1242409711ff5721add51979e9e11e23ebb7e5a4 # v1
         with:
           xcode-version: latest-stable
 
@@ -215,7 +215,7 @@ jobs:
           spctl -a -t open --context context:primary-signature -v "$DMG_PATH"
 
       - name: Restore gh-pages contents
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         continue-on-error: true
         with:
           ref: gh-pages
@@ -279,6 +279,6 @@ jobs:
           git push origin HEAD:gh-pages
 
       - name: Upload DMG to GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: ${{ env.DMG_PATH }}
