@@ -26,10 +26,6 @@ struct LayoutBar: View {
     let section: MenuBarSection
     let spacing: CGFloat
 
-    private var menuBarManager: MenuBarManager {
-        appState.menuBarManager
-    }
-
     private var backgroundShape: some InsettableShape {
         RoundedRectangle(cornerRadius: 9, style: .circular)
     }
@@ -43,7 +39,7 @@ struct LayoutBar: View {
         conditionalBody
             .frame(height: 50)
             .frame(maxWidth: .infinity)
-            .layoutBarStyle(appState: appState, averageColorInfo: menuBarManager.averageColorInfo)
+            .layoutBarStyle(appState: appState, averageColorInfo: nil)
             .clipShape(backgroundShape)
             .overlay {
                 backgroundShape
@@ -55,7 +51,7 @@ struct LayoutBar: View {
     private var conditionalBody: some View {
         if imageCache.cacheFailed(for: section.name) {
             Text("Unable to display menu bar items")
-                .foregroundStyle(menuBarManager.averageColorInfo?.color.brightness ?? 0 > 0.67 ? .black : .white)
+                .foregroundStyle(.primary)
         } else {
             Representable(appState: appState, section: section, spacing: spacing)
         }
