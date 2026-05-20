@@ -821,6 +821,21 @@ extension MenuBarItemManager {
     ///   - item: The item to check the position of.
     ///   - destination: The destination to compare the item's position against.
     private func itemHasCorrectPosition(item: MenuBarItem, for destination: MoveDestination) throws -> Bool {
+        let orderedItems = MenuBarItem.getMenuBarItems(onScreenOnly: false, activeSpaceOnly: true)
+        let targetItem = getTargetItem(for: destination)
+
+        if
+            let itemIndex = orderedItems.firstIndex(where: { $0.windowID == item.windowID }),
+            let targetIndex = orderedItems.firstIndex(where: { $0.windowID == targetItem.windowID })
+        {
+            switch destination {
+            case .leftOfItem:
+                return itemIndex + 1 == targetIndex
+            case .rightOfItem:
+                return targetIndex + 1 == itemIndex
+            }
+        }
+
         guard let currentFrame = getCurrentFrame(for: item) else {
             throw EventError(code: .invalidItem, item: item)
         }
@@ -829,12 +844,12 @@ extension MenuBarItemManager {
             guard let currentTargetFrame = getCurrentFrame(for: targetItem) else {
                 throw EventError(code: .invalidItem, item: targetItem)
             }
-            return currentFrame.maxX == currentTargetFrame.minX
+            return abs(currentFrame.maxX - currentTargetFrame.minX) <= 1
         case .rightOfItem(let targetItem):
             guard let currentTargetFrame = getCurrentFrame(for: targetItem) else {
                 throw EventError(code: .invalidItem, item: targetItem)
             }
-            return currentFrame.minX == currentTargetFrame.maxX
+            return abs(currentFrame.minX - currentTargetFrame.maxX) <= 1
         }
     }
 
