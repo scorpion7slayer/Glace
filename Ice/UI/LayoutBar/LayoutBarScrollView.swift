@@ -44,6 +44,10 @@ final class LayoutBarScrollView: NSScrollView {
         self.horizontalScrollElasticity = .none
 
         self.drawsBackground = false
+        self.backgroundColor = .clear
+
+        self.contentView.drawsBackground = false
+        self.contentView.backgroundColor = .clear
 
         self.documentView = self.paddingView
 
