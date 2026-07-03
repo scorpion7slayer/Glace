@@ -84,7 +84,7 @@ enum MenuBarItemDiscovery {
                 // Glace's divider status items are implementation details, not apps
                 // the user can manage in the native macOS 27 overflow interface.
                 if bundleIdentifier == ownBundleIdentifier,
-                   stableName.hasPrefix("Ice.ControlItem.")
+                    stableName.hasPrefix("Ice.ControlItem.")
                 {
                     continue
                 }
@@ -92,7 +92,7 @@ enum MenuBarItemDiscovery {
                 // The double-chevron is the system overflow affordance itself.
                 let normalizedName = stableName.lowercased()
                 if bundleIdentifier == "com.apple.MenuBarAgent",
-                   normalizedName.contains("overflow")
+                    normalizedName.contains("overflow")
                 {
                     continue
                 }
