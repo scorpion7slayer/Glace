@@ -69,6 +69,14 @@ final class AppPermissions: ObservableObject {
         }
     }
 
+    /// Starts observing all permission states.
+    func startAllChecks() {
+        logger.info("Starting all permissions checks")
+        for permission in allPermissions {
+            permission.startCheck()
+        }
+    }
+
     /// Stops running all permissions checks.
     func stopAllChecks() {
         logger.info("Stopping all permissions checks")

@@ -78,8 +78,15 @@ class Permission: ObservableObject, Identifiable {
             return
         }
 
-        timerCancellable = Timer.publish(every: 1, on: .main, in: .default)
+        let timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
+
+        let appDidBecomeActive = NotificationCenter.default
+            .publisher(for: NSApplication.didBecomeActiveNotification)
+            .map { _ in Date() }
+
+        timerCancellable = timer
+            .merge(with: appDidBecomeActive)
             .sink { [weak self] _ in
                 self?.refreshPermissionState()
             }
@@ -87,6 +94,9 @@ class Permission: ObservableObject, Identifiable {
 
     /// Performs the request and opens the System Settings app to the appropriate pane.
     func performRequest() {
+        // Start observing before macOS moves focus to the consent dialog or
+        // System Settings, so accepting a permission is reflected immediately.
+        startCheck()
         request()
         if let settingsURL {
             NSWorkspace.shared.open(settingsURL)
@@ -133,7 +143,7 @@ final class AccessibilityPermission: Permission {
                 "Arrange menu bar items.",
             ],
             isRequired: true,
-            settingsURL: nil,
+            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"),
             check: {
                 AXHelpers.isProcessTrusted()
             },
@@ -157,7 +167,9 @@ final class ScreenRecordingPermission: Permission {
             isRequired: false,
             settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"),
             check: {
-                ScreenCapture.checkPermissions()
+                // Keep the shared capture cache synchronized with changes made
+                // in System Settings while this screen is open.
+                ScreenCapture.cachedCheckPermissions(reset: true)
             },
             request: {
                 ScreenCapture.requestPermissions()

@@ -14,18 +14,16 @@ enum ScreenCapture {
     /// Returns a Boolean value that indicates whether the app has screen
     /// capture permissions.
     static func checkPermissions() -> Bool {
-        for windowID in Bridging.getMenuBarWindowList(option: [.itemsOnly, .activeSpace]) {
-            guard
-                let window = WindowInfo(windowID: windowID),
-                window.owningApplication != .current // Skip windows we own.
-            else {
-                continue
-            }
-            return window.title != nil
+        // Prefer the system preflight check. Inspecting window metadata remains
+        // useful as a fallback on systems where preflight has not refreshed yet.
+        if CGPreflightScreenCaptureAccess() {
+            return true
         }
-        // CGPreflightScreenCaptureAccess() only returns an initial value,
-        // but we can use it as a fallback.
-        return CGPreflightScreenCaptureAccess()
+
+        return Bridging.getMenuBarWindowList(option: [.itemsOnly, .activeSpace])
+            .compactMap { WindowInfo(windowID: $0) }
+            .filter { $0.owningApplication != .current }
+            .contains { $0.title != nil }
     }
 
     /// Returns a Boolean value that indicates whether the app has screen
