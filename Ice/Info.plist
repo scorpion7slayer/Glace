@@ -4,6 +4,10 @@
 <dict>
 	<key>SUFeedURL</key>
 	<string>https://scorpion7slayer.github.io/Glace/updates/appcast.xml</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUAutomaticallyUpdate</key>
+	<false/>
 	<key>SUPublicEDKey</key>
 	<string>SCfNrtSEgSOctJ9qORvaxNOJdjn81rR8Tky7CnUQT+o=</string>
 </dict>

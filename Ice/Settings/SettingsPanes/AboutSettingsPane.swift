@@ -45,6 +45,14 @@ struct AboutSettingsPane: View {
         }
     }
 
+    private var updateCheckStatusForegroundStyle: some ShapeStyle {
+        if updatesManager.updateCheckStatus.isError {
+            AnyShapeStyle(.red)
+        } else {
+            AnyShapeStyle(.secondary)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             mainForm
@@ -115,9 +123,7 @@ struct AboutSettingsPane: View {
         IceSection(options: .hasDividers) {
             automaticallyCheckForUpdates
             automaticallyDownloadUpdates
-            if updatesManager.canCheckForUpdates {
-                checkForUpdates
-            }
+            checkForUpdates
         }
         .frame(maxWidth: 600)
     }
@@ -145,8 +151,14 @@ struct AboutSettingsPane: View {
                 updatesManager.checkForUpdates()
             }
             Spacer()
-            Text("Last checked: \(lastUpdateCheckString)")
-                .font(.caption)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("Last checked: \(lastUpdateCheckString)")
+                if let status = updatesManager.updateCheckStatus.displayString {
+                    Text(status)
+                        .foregroundStyle(updateCheckStatusForegroundStyle)
+                }
+            }
+            .font(.caption)
         }
     }
 
