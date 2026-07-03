@@ -24,6 +24,30 @@ fi
 
 pkill -x "$APP_NAME" >/dev/null 2>&1 || true
 
+SIGNING_IDENTITY="${GLACE_CODE_SIGN_IDENTITY:-}"
+if [[ -z "$SIGNING_IDENTITY" ]]; then
+  SIGNING_IDENTITY="$(security find-identity -v -p codesigning 2>/dev/null \
+    | awk '/"Apple Development:/{print $2; exit}')"
+fi
+
+if [[ -n "$SIGNING_IDENTITY" ]]; then
+  echo "Signing with a stable Apple Development identity so macOS permissions persist between builds."
+  SIGNING_ARGUMENTS=(
+    "CODE_SIGN_IDENTITY=$SIGNING_IDENTITY"
+    CODE_SIGN_STYLE=Manual
+    DEVELOPMENT_TEAM=
+    CODE_SIGNING_ALLOWED=YES
+  )
+else
+  echo "Warning: no Apple Development identity found; permissions may need to be granted after each build." >&2
+  SIGNING_ARGUMENTS=(
+    CODE_SIGN_IDENTITY=-
+    CODE_SIGN_STYLE=Manual
+    DEVELOPMENT_TEAM=
+    CODE_SIGNING_ALLOWED=YES
+  )
+fi
+
 xcodebuild \
   -project "$ROOT_DIR/Ice.xcodeproj" \
   -scheme Ice \
@@ -31,10 +55,7 @@ xcodebuild \
   -destination "platform=macOS,arch=$(uname -m)" \
   -derivedDataPath "$DERIVED_DATA" \
   ONLY_ACTIVE_ARCH=YES \
-  CODE_SIGN_IDENTITY=- \
-  CODE_SIGN_STYLE=Manual \
-  DEVELOPMENT_TEAM= \
-  CODE_SIGNING_ALLOWED=YES \
+  "${SIGNING_ARGUMENTS[@]}" \
   build
 
 open_app() {
