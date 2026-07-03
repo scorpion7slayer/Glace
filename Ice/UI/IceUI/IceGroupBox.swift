@@ -13,7 +13,7 @@ struct IceGroupBox<Header: View, Content: View, Footer: View>: View {
 
     private var backgroundShape: some InsettableShape {
         if #available(macOS 26.0, *) {
-            RoundedRectangle(cornerRadius: 11, style: .continuous)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
         } else {
             RoundedRectangle(cornerRadius: 7, style: .circular)
         }
@@ -167,14 +167,7 @@ struct IceGroupBox<Header: View, Content: View, Footer: View>: View {
                 .padding([.top, .leading], 8)
                 .padding(.bottom, 2)
 
-            contentStack
-                .padding(padding)
-                .background {
-                    backgroundShape
-                        .fill(Color.primary.quinary)
-                        .strokeBorder(borderStyle)
-                }
-                .containerShape(backgroundShape)
+            styledContent
 
             footer
                 .padding([.bottom, .leading], 8)
@@ -187,6 +180,29 @@ struct IceGroupBox<Header: View, Content: View, Footer: View>: View {
     @ViewBuilder
     private var contentStack: some View {
         VStack { content }
+    }
+
+    @ViewBuilder
+    private var styledContent: some View {
+        if #available(macOS 26.0, *) {
+            contentStack
+                .padding(padding)
+                .glassEffect(.regular, in: backgroundShape)
+                .overlay {
+                    backgroundShape
+                        .strokeBorder(Color.primary.opacity(0.10), lineWidth: 0.5)
+                }
+                .containerShape(backgroundShape)
+        } else {
+            contentStack
+                .padding(padding)
+                .background {
+                    backgroundShape
+                        .fill(Color.primary.quinary)
+                        .strokeBorder(borderStyle)
+                }
+                .containerShape(backgroundShape)
+        }
     }
 }
 

@@ -5,6 +5,7 @@
 
 import Combine
 import Cocoa
+import SwiftUI
 
 // MARK: - Permission
 
@@ -16,16 +17,16 @@ class Permission: ObservableObject, Identifiable {
     @Published private(set) var hasPermission = false
 
     /// The title of the permission.
-    let title: String
+    let title: LocalizedStringKey
 
     /// Descriptive details for the permission.
-    let details: [String]
+    let details: [LocalizedStringKey]
 
     /// A Boolean value that indicates if the app can work without this permission.
     let isRequired: Bool
 
     /// The title shown by buttons that initiate the permission flow.
-    let requestButtonTitle: String
+    let requestButtonTitle: LocalizedStringKey
 
     /// The URL of the settings pane to open.
     private let settingsURL: URL?
@@ -53,10 +54,10 @@ class Permission: ObservableObject, Identifiable {
     ///   - check: A function that checks permissions.
     ///   - request: A function that requests permissions.
     init(
-        title: String,
-        details: [String],
+        title: LocalizedStringKey,
+        details: [LocalizedStringKey],
         isRequired: Bool,
-        requestButtonTitle: String = "Grant Permission",
+        requestButtonTitle: LocalizedStringKey = "Grant Permission",
         settingsURL: URL?,
         check: @escaping () -> Bool,
         request: @escaping () -> Void
@@ -164,8 +165,8 @@ final class AccessibilityPermission: Permission {
 
 final class ScreenRecordingPermission: Permission {
     init() {
-        let details: [String]
-        let requestButtonTitle: String
+        let details: [LocalizedStringKey]
+        let requestButtonTitle: LocalizedStringKey
 
         if #available(macOS 27.0, *) {
             details = [

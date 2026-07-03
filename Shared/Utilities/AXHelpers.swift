@@ -23,7 +23,13 @@ enum AXHelpers {
     }
 
     static func application(for runningApp: NSRunningApplication) -> Application? {
-        queue.sync { Application(runningApp) }
+        queue.sync {
+            let application = Application(runningApp)
+            if let application {
+                AXUIElementSetMessagingTimeout(application.element, 0.25)
+            }
+            return application
+        }
     }
 
     static func extrasMenuBar(for app: Application) -> UIElement? {
@@ -44,5 +50,17 @@ enum AXHelpers {
 
     static func role(for element: UIElement) -> Role? {
         queue.sync { try? element.role() }
+    }
+
+    static func title(for element: UIElement) -> String? {
+        queue.sync { try? element.attribute(.title) }
+    }
+
+    static func identifier(for element: UIElement) -> String? {
+        queue.sync { try? element.attribute(.identifier) }
+    }
+
+    static func description(for element: UIElement) -> String? {
+        queue.sync { try? element.attribute(.description) }
     }
 }
