@@ -3,11 +3,14 @@
 //  Ice
 //
 
+import AppKit
 import CoreGraphics
+import OSLog
 import ScreenCaptureKit
 
 /// A namespace for screen capture operations.
 enum ScreenCapture {
+    private static let logger = Logger(category: "ScreenCapture")
 
     // MARK: Permissions
 
@@ -47,10 +50,23 @@ enum ScreenCapture {
     /// Requests screen capture permissions.
     static func requestPermissions() {
         if #available(macOS 26.0, *) {
-            // On Tahoe and later, querying SCShareableContent no longer
-            // registers the app in Privacy & Security. Use the dedicated
-            // CoreGraphics request API so macOS creates the TCC entry.
-            CGRequestScreenCaptureAccess()
+            // Glace is an LSUIElement app without a Dock icon. On macOS 26 and
+            // later, TCC only registers the request reliably when the app is
+            // frontmost, so activate before calling the dedicated API.
+            NSApp.activate(ignoringOtherApps: true)
+
+            // CoreGraphics creates the TCC entry. Keep ScreenCaptureKit as a
+            // fallback prompt trigger because behavior differs across macOS 26
+            // and 27 builds.
+            let granted = CGRequestScreenCaptureAccess()
+            logger.debug("CoreGraphics screen capture request result: \(granted)")
+            SCShareableContent.getWithCompletionHandler { _, error in
+                if let error {
+                    logger.debug("ScreenCaptureKit permission request failed: \(error)")
+                } else {
+                    logger.debug("ScreenCaptureKit permission request completed")
+                }
+            }
         } else if #available(macOS 15.0, *) {
             // CGRequestScreenCaptureAccess() is broken on macOS 15. We can
             // try accessing SCShareableContent to trigger a request if the
