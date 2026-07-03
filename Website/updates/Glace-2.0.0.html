@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d0d0f">
+  <title>Glace 2.0.0 — Release notes</title>
+  <style>
+    :root { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: #0d0d0f; color: #f0e4d4; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 75% 5%, rgba(238,147,183,.13), transparent 30rem), #0d0d0f; }
+    header, main, footer { width: min(calc(100% - 32px), 860px); margin-inline: auto; }
+    header { padding: 38px 0 24px; display: flex; align-items: center; gap: 15px; }
+    header img { width: 58px; height: 58px; border-radius: 16px; }
+    header a { color: inherit; text-decoration: none; font-size: 1.8rem; font-weight: 650; letter-spacing: -.04em; }
+    main { padding: clamp(34px, 7vw, 70px); border: 1px solid rgba(231,210,187,.24); border-radius: 30px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.035)); box-shadow: 0 30px 80px rgba(0,0,0,.28); }
+    h1 { margin: 0 0 12px; font-size: clamp(3rem, 8vw, 5rem); letter-spacing: -.055em; line-height: 1; }
+    .version { margin: 0 0 48px; color: #ee93b7; font-size: 1.2rem; }
+    h2 { margin: 42px 0 14px; font-size: 1.75rem; }
+    h3 { margin: 30px 0 10px; font-size: 1.3rem; }
+    p, li { color: #bbb4b5; font-size: 1.06rem; line-height: 1.65; }
+    li { margin: 9px 0; }
+    a { color: #ee93b7; }
+    code { padding: 2px 7px; border-radius: 7px; background: rgba(238,147,183,.1); color: #f6b3ca; }
+    footer { padding: 28px 0 48px; display: flex; justify-content: space-between; gap: 20px; color: #858185; }
+    @media (max-width: 560px) { main { padding: 30px 22px; border-radius: 24px; } footer { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <header><img src="../assets/glace-icon.png" alt=""><a href="../">Glace</a></header>
+  <main>
+    <h1>Release notes</h1>
+    <p class="version">Glace 2.0.0</p>
+    <h2>Glace 2.0</h2>
+<p>Glace 2.0 is a compatibility and reliability release for modern macOS.</p>
+<h3>What’s new</h3>
+<ul><li>Added native support for macOS 26 Tahoe and compatibility behavior for macOS 27 GoldenGate.</li><li>Added an English and French language selector. English remains the default.</li><li>Added Liquid Glass styling where supported by macOS.</li><li>Replaced the broken GoldenGate reveal animation with a native context menu on the Glace status item.</li><li>Restored the Glace application menu next to the Apple menu.</li><li>Reworked menu bar item discovery so the layout page no longer loads forever.</li><li>Added clear GoldenGate explanations for controls that macOS now manages itself.</li><li>Corrected the Glace melting ice-cream application icon.</li><li>Added a dedicated Glace website, release notes, security policy, and signed release workflow.</li></ul>
+<h3>Permissions and identity</h3>
+<p>The app uses the <code>com.theo.Glace</code> identity and is signed by the Glace maintainer’s Developer ID certificate. Accessibility and Screen Recording permissions are requested by Glace itself rather than by Ice, Thaw, or another fork.</p>
+<h3>Compatibility</h3>
+<ul><li>macOS 26 Tahoe keeps Glace’s classic hide, reveal, search, spacing, and layout controls.</li><li>macOS 27 GoldenGate uses Apple’s system-managed double arrow for hidden item placement. Glace provides detection, appearance overlays, and native menu actions without fighting the system behavior.</li></ul>
+<h3>Open source</h3>
+<p>Glace remains a fork of <a href="https://github.com/jordanbaird/Ice" rel="noreferrer">Ice by Jordan Baird</a> and includes attribution for every bundled open-source dependency.</p>
+  </main>
+  <footer><span>Made for macOS.</span><a href="https://github.com/scorpion7slayer/Glace/releases">All releases</a></footer>
+</body>
+</html>

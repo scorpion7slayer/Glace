@@ -34,7 +34,7 @@ struct AboutSettingsPane: View {
     }
 
     private var donateURL: URL {
-        guard let url = URL(string: "https://icemenubar.app/Donate") else {
+        guard let url = URL(string: "https://github.com/sponsors/scorpion7slayer") else {
             preconditionFailure("Invalid donation URL")
         }
         return url

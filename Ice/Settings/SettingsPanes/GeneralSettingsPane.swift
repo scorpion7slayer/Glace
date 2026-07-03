@@ -242,10 +242,12 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var iceBarLocationPicker: some View {
-        IcePicker("Location", selection: $settings.iceBarLocation) {
-            ForEach(IceBarLocation.allCases) { location in
-                Text(location.localized).tag(location)
-            }
+        IceMenuPicker(
+            "Location",
+            selection: $settings.iceBarLocation,
+            options: IceBarLocation.allCases
+        ) { location in
+            Text(location.localized)
         }
         .annotation {
             switch settings.iceBarLocation {
@@ -289,10 +291,12 @@ struct GeneralSettingsPane: View {
     @ViewBuilder
     private var rehideStrategyPicker: some View {
         VStack {
-            IcePicker("Strategy", selection: $settings.rehideStrategy) {
-                ForEach(RehideStrategy.allCases) { strategy in
-                    Text(strategy.localized).tag(strategy)
-                }
+            IceMenuPicker(
+                "Strategy",
+                selection: $settings.rehideStrategy,
+                options: RehideStrategy.allCases
+            ) { strategy in
+                Text(strategy.localized)
             }
             .annotation {
                 switch settings.rehideStrategy {

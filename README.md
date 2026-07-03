@@ -9,6 +9,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS-blue?style=flat-square)](https://www.apple.com/macos/)
 [![Requirements](https://img.shields.io/badge/requirements-macOS%2014%2B-fa4e49?style=flat-square)](https://www.apple.com/macos/)
 [![Download](https://img.shields.io/badge/download-latest-brightgreen?style=flat-square)](https://github.com/scorpion7slayer/Glace/releases/latest)
+[![Website](https://img.shields.io/badge/website-Glace-ee93b7?style=flat-square)](https://scorpion7slayer.github.io/Glace/)
 [![License](https://img.shields.io/github/license/scorpion7slayer/Glace?style=flat-square)](LICENSE)
 
 ## Highlights
@@ -27,7 +28,7 @@ Glace 2.0.0 incorporates Ice's macOS 26 Tahoe architecture updates, including it
 
 The project also builds and launches with Xcode 27 and the macOS 27 SDK on macOS 27 GoldenGate. GoldenGate no longer exposes individual status items as WindowServer windows, so Glace uses Accessibility to detect the items published by `MenuBarAgent` and presents the native macOS overflow workflow instead of leaving the layout editor in an endless loading state. Legacy divider-based drag management remains available through macOS 26.
 
-Settings use the system Liquid Glass material on macOS 26 and later, with the existing adaptive appearance retained on older supported releases. English is the source and fallback language; French is included and follows the user's macOS language preference.
+Settings use the system Liquid Glass material on macOS 26 and later, with the existing adaptive appearance retained on older supported releases. English is the source and default language; French is included and can be selected instantly from Glace's General settings.
 
 Swift dependencies have been updated for the SDK 27 toolchain, including CompactSlider 2.1 and Sparkle 2.9.4. The deployment target remains macOS 14, so Sonoma and later remain supported.
 
@@ -53,11 +54,14 @@ The script automatically prefers `/Applications/Xcode-beta.app` when present, th
 
 For release signing, notarization, and Sparkle publication details, see [RELEASING.md](RELEASING.md).
 
+The product website is published from [`Website/`](Website/) to [scorpion7slayer.github.io/Glace](https://scorpion7slayer.github.io/Glace/).
+
 ## Credits
 
 - Original project: [Ice](https://github.com/jordanbaird/Ice)
 - Original author: [Jordan Baird](https://github.com/jordanbaird)
 - Glace maintenance: [scorpion7slayer](https://github.com/scorpion7slayer)
+- Sponsor Glace: [GitHub Sponsors](https://github.com/sponsors/scorpion7slayer)
 
 ## License
 
