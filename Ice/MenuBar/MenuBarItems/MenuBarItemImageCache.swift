@@ -67,6 +67,18 @@ final class MenuBarItemImageCache: ObservableObject {
         configureCancellables()
     }
 
+    /// Clears the cached images when no UI currently depends on them.
+    @MainActor
+    private func clearCacheIfNeeded() {
+        guard !images.isEmpty || screen != nil || menuBarHeight != nil else {
+            return
+        }
+
+        images.removeAll(keepingCapacity: false)
+        screen = nil
+        menuBarHeight = nil
+    }
+
     /// Configures the internal observers for the cache.
     @MainActor
     private func configureCancellables() {
@@ -315,6 +327,13 @@ final class MenuBarItemImageCache: ObservableObject {
             let section = await appState.menuBarManager.iceBarPanel.currentSection
         {
             sectionsNeedingDisplay.append(section)
+        }
+
+        guard !sectionsNeedingDisplay.isEmpty else {
+            await MainActor.run {
+                self.clearCacheIfNeeded()
+            }
+            return
         }
 
         await updateCache(sections: sectionsNeedingDisplay)

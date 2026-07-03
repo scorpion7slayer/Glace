@@ -31,27 +31,10 @@ final class RunLoopLocalEventMonitor {
             true,
             0
         ) { _, _ in
-            var events = [NSEvent]()
-
-            while let event = NSApp.nextEvent(matching: .any, until: nil, inMode: .default, dequeue: true) {
-                events.append(event)
+            guard let event = NSApp.nextEvent(matching: mask, until: nil, inMode: .default, dequeue: false) else {
+                return
             }
-
-            for event in events {
-                var handledEvent: NSEvent?
-
-                if !mask.contains(NSEvent.EventTypeMask(rawValue: 1 << event.type.rawValue)) {
-                    handledEvent = event
-                } else if let eventFromHandler = handler(event) {
-                    handledEvent = eventFromHandler
-                }
-
-                guard let handledEvent else {
-                    continue
-                }
-
-                NSApp.postEvent(handledEvent, atStart: false)
-            }
+            _ = handler(event)
         }
     }
 

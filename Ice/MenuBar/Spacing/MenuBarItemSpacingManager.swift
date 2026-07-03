@@ -51,8 +51,8 @@ final class MenuBarItemSpacingManager {
     private func runCommand(_ command: String, with arguments: [String]) async throws {
         let process = Process()
 
-        process.executableURL = URL(filePath: "/usr/bin/env")
-        process.arguments = CollectionOfOne(command) + arguments
+        process.executableURL = URL(filePath: "/usr/bin/\(command)")
+        process.arguments = arguments
 
         let task = Task.detached {
             try process.run()

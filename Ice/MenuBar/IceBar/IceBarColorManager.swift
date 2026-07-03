@@ -30,7 +30,8 @@ final class IceBarColorManager: ObservableObject {
                     guard
                         let self,
                         let screen,
-                        screen == .main
+                        screen == .main,
+                        iceBarPanel.isVisible
                     else {
                         return
                     }
