@@ -16,12 +16,10 @@ struct AboutSettingsPane: View {
     }
 
     private var contributeURL: URL {
-        // swiftlint:disable:next force_unwrapping
         URL(string: "https://github.com/scorpion7slayer/Glace")!
     }
 
     private var originalProjectURL: URL {
-        // swiftlint:disable:next force_unwrapping
         URL(string: "https://github.com/jordanbaird/Ice")!
     }
 
@@ -30,7 +28,6 @@ struct AboutSettingsPane: View {
     }
 
     private var donateURL: URL {
-        // swiftlint:disable:next force_unwrapping
         URL(string: "https://icemenubar.app/Donate")!
     }
 
@@ -40,6 +37,10 @@ struct AboutSettingsPane: View {
         } else {
             "Never"
         }
+    }
+
+    private var updateCheckStatusForegroundStyle: some ShapeStyle {
+        updatesManager.updateCheckStatus.isError ? AnyShapeStyle(.red) : AnyShapeStyle(.secondary)
     }
 
     var body: some View {
@@ -90,7 +91,7 @@ struct AboutSettingsPane: View {
                 }
 
                 VStack(alignment: .leading) {
-                    Text("Ice")
+                    Text("Glace")
                         .font(.system(size: 80))
                         .foregroundStyle(.primary)
 
@@ -101,6 +102,15 @@ struct AboutSettingsPane: View {
                     Text(Constants.copyrightString)
                         .font(.system(size: 14))
                         .foregroundStyle(.secondary.opacity(0.67))
+
+                    Text("Glace is a fork of Ice by Jordan Baird.")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+
+                    Button("Original Ice project") {
+                        openURL(originalProjectURL)
+                    }
+                    .buttonStyle(.link)
                 }
                 .fontWeight(.medium)
             }
@@ -112,9 +122,7 @@ struct AboutSettingsPane: View {
         IceSection(options: .hasDividers) {
             automaticallyCheckForUpdates
             automaticallyDownloadUpdates
-            if updatesManager.canCheckForUpdates {
-                checkForUpdates
-            }
+            checkForUpdates
         }
         .frame(maxWidth: 600)
     }
@@ -142,8 +150,14 @@ struct AboutSettingsPane: View {
                 updatesManager.checkForUpdates()
             }
             Spacer()
-            Text("Last checked: \(lastUpdateCheckString)")
-                .font(.caption)
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("Last checked: \(lastUpdateCheckString)")
+                if let status = updatesManager.updateCheckStatus.displayString {
+                    Text(status)
+                        .foregroundStyle(updateCheckStatusForegroundStyle)
+                }
+            }
+            .font(.caption)
         }
     }
 

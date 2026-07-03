@@ -9,9 +9,39 @@ import SwiftUI
 /// Manager for app updates.
 @MainActor
 final class UpdatesManager: NSObject, ObservableObject {
+    enum UpdateCheckStatus: Equatable {
+        case idle
+        case checking
+        case upToDate
+        case updateAvailable(String)
+        case failed(String)
+
+        var displayString: String? {
+            switch self {
+            case .idle:
+                nil
+            case .checking:
+                "Checking for updates..."
+            case .upToDate:
+                "You're up to date."
+            case .updateAvailable(let version):
+                "Version \(version) is available."
+            case .failed(let message):
+                message
+            }
+        }
+
+        var isError: Bool {
+            if case .failed = self {
+                true
+            } else {
+                false
+            }
+        }
+    }
+
     /// The repository page for Glace releases.
     private static let releasesURL: URL = {
-        // swiftlint:disable:next force_unwrapping
         URL(string: "https://github.com/scorpion7slayer/Glace/releases/latest")!
     }()
 
@@ -20,6 +50,9 @@ final class UpdatesManager: NSObject, ObservableObject {
 
     /// The date of the last update check.
     @Published var lastUpdateCheckDate: Date?
+
+    /// The status of a user-initiated update check.
+    @Published var updateCheckStatus = UpdateCheckStatus.idle
 
     /// The shared app state.
     private(set) weak var appState: AppState?
@@ -67,6 +100,9 @@ final class UpdatesManager: NSObject, ObservableObject {
 
     /// Configures the internal observers for the manager.
     private func configureCancellables() {
+        canCheckForUpdates = updater.canCheckForUpdates
+        lastUpdateCheckDate = updater.lastUpdateCheckDate
+
         updater.publisher(for: \.canCheckForUpdates)
             .assign(to: &$canCheckForUpdates)
         updater.publisher(for: \.lastUpdateCheckDate)
@@ -76,25 +112,64 @@ final class UpdatesManager: NSObject, ObservableObject {
     /// Checks for app updates.
     @objc func checkForUpdates() {
         if canCheckForUpdates {
+            updateCheckStatus = .checking
             updater.checkForUpdates()
         } else {
+            updateCheckStatus = .failed("Opening the latest Glace release page.")
             NSWorkspace.shared.open(Self.releasesURL)
         }
         // Activate the app in case an alert needs to be displayed.
-        appState.activate(withPolicy: .regular)
-        appState.openWindow(.settings)
-        updater.checkForUpdates()
-        #endif
+        appState?.activate(withPolicy: .regular)
+        appState?.openWindow(.settings)
     }
 }
 
 // MARK: UpdatesManager: SPUUpdaterDelegate
-extension UpdatesManager: @preconcurrency SPUUpdaterDelegate {
+extension UpdatesManager: SPUUpdaterDelegate {
     func updater(_ updater: SPUUpdater, willScheduleUpdateCheckAfterDelay delay: TimeInterval) {
         guard let appState else {
             return
         }
         appState.userNotificationManager.requestAuthorization()
+    }
+
+    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
+        updateCheckStatus = .updateAvailable(item.displayVersionString)
+    }
+
+    func updaterDidNotFindUpdate(_ updater: SPUUpdater, error: Error) {
+        let nsError = error as NSError
+        let userInitiated = nsError.userInfo[SPUNoUpdateFoundUserInitiatedKey] as? Bool ?? false
+
+        if userInitiated {
+            updateCheckStatus = .upToDate
+        }
+    }
+
+    func updater(
+        _ updater: SPUUpdater,
+        didFinishUpdateCycleFor updateCheck: SPUUpdateCheck,
+        error: Error?
+    ) {
+        guard updateCheck == .updates else {
+            return
+        }
+
+        lastUpdateCheckDate = updater.lastUpdateCheckDate ?? .now
+
+        guard let error else {
+            if case .checking = updateCheckStatus {
+                updateCheckStatus = .upToDate
+            }
+            return
+        }
+
+        let nsError = error as NSError
+        if nsError.domain == SUSparkleErrorDomain, nsError.code == 1001 {
+            updateCheckStatus = .upToDate
+        } else {
+            updateCheckStatus = .failed(error.localizedDescription)
+        }
     }
 }
 

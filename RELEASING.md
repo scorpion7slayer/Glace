@@ -17,7 +17,7 @@ The GitHub Actions workflow in `.github/workflows/release.yml` handles this on e
 - `APPLE_ID`: Apple account email used for notarization
 - `APPLE_APP_SPECIFIC_PASSWORD`: app-specific password for notarization
 - `APPLE_TEAM_ID`: Apple Developer team identifier
-- `SPARKLE_PRIVATE_KEY`: Sparkle private EdDSA key matching `SUPublicEDKey` in `Ice/Info.plist`
+- `SPARKLE_PRIVATE_KEY`: Sparkle private EdDSA key matching `SUPublicEDKey` in `Ice/Resources/Info.plist`
 
 ## GitHub setup
 

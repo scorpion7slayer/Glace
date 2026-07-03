@@ -240,7 +240,9 @@ extension HIDEventManager {
 
         Task {
             // Give the window under the mouse a chance to focus.
-            try await Task.sleep(for: .milliseconds(250))
+            guard (try? await Task.sleep(for: .milliseconds(250))) != nil else {
+                return
+            }
 
             // Don't bother checking the window if the click caused
             // a space change.
@@ -293,7 +295,9 @@ extension HIDEventManager {
                 return
             }
             // Delay prevents the menu from immediately closing.
-            try await Task.sleep(for: .milliseconds(100))
+            guard (try? await Task.sleep(for: .milliseconds(100))) != nil else {
+                return
+            }
             appState.menuBarManager.showSecondaryContextMenu(at: mouseLocation)
         }
     }
@@ -349,7 +353,9 @@ extension HIDEventManager {
                 return
             }
             Task {
-                try await Task.sleep(for: .seconds(delay))
+                guard (try? await Task.sleep(for: .seconds(delay))) != nil else {
+                    return
+                }
                 // Make sure the mouse is still inside.
                 guard isMouseInsideEmptyMenuBarSpace(appState: appState, screen: screen) else {
                     return
@@ -364,7 +370,9 @@ extension HIDEventManager {
                 return
             }
             Task {
-                try await Task.sleep(for: .seconds(delay))
+                guard (try? await Task.sleep(for: .seconds(delay))) != nil else {
+                    return
+                }
                 // Make sure the mouse is still outside.
                 guard
                     !isMouseInsideMenuBar(appState: appState, screen: screen),

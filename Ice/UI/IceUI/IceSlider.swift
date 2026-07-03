@@ -53,19 +53,16 @@ struct IceSlider<Value: BinaryFloatingPoint, ValueLabel: View>: View {
         CompactSlider(
             value: $value,
             in: bounds,
-            step: step ?? 0,
-            handleVisibility: .hovering(width: 0),
-            minHeight: 0,
-            gestureOptions: .default.subtracting([.scrollWheel])
-        ) {
+            step: step ?? 0
+        )
+        .compactSliderHandleStyle(.hidden())
+        .compactSliderOptionsByRemoving(.enabledHapticFeedback, .scrollWheel)
+        .overlay {
             valueLabel
                 .frame(height: height)
+                .allowsHitTesting(false)
         }
-        .compactSliderDisabledHapticFeedback(true)
-        .compactSliderSecondaryColor(
-            progressColor: .accentColor.opacity(0.5),
-            focusedProgressColor: .accentColor.opacity(0.75)
-        )
+        .frame(height: height)
         .clipShape(borderShape)
         .contentShape([.interaction, .focusEffect], borderShape)
     }

@@ -376,11 +376,17 @@ private struct MenuBarSearchContentView: View {
     private func performAction(for item: MenuBarItem) {
         closePanel()
         Task {
-            try await Task.sleep(for: .milliseconds(25))
-            if Bridging.isWindowOnScreen(item.windowID) {
-                try await itemManager.click(item: item, with: .left)
-            } else {
-                await itemManager.temporarilyShow(item: item, clickingWith: .left)
+            guard (try? await Task.sleep(for: .milliseconds(25))) != nil else {
+                return
+            }
+            do {
+                if Bridging.isWindowOnScreen(item.windowID) {
+                    try await itemManager.click(item: item, with: .left)
+                } else {
+                    await itemManager.temporarilyShow(item: item, clickingWith: .left)
+                }
+            } catch {
+                Logger.default.error("Error opening menu bar item: \(error, privacy: .public)")
             }
         }
     }

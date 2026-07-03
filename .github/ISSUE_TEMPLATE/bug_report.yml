@@ -29,7 +29,7 @@ body:
       required: true
   - type: input
     attributes:
-      label: Ice Version
+      label: Glace Version
       placeholder: e.g. 1.2.3
     validations:
       required: true

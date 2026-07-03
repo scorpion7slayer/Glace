@@ -123,7 +123,9 @@ final class MenuBarManager: ObservableObject {
                     !appState.hidEventManager.isMouseInsideMenuBar(appState: appState, screen: screen)
                 {
                     Task {
-                        try await Task.sleep(for: .seconds(0.1))
+                        guard (try? await Task.sleep(for: .seconds(0.1))) != nil else {
+                            return
+                        }
                         hiddenSection.hide()
                     }
                 }
@@ -273,7 +275,7 @@ final class MenuBarManager: ObservableObject {
 
     /// Shows the secondary context menu.
     func showSecondaryContextMenu(at point: CGPoint) {
-        let menu = NSMenu(title: "Ice")
+        let menu = NSMenu(title: "Glace")
 
         let editAppearanceItem = NSMenuItem(
             title: "Edit Menu Bar Appearance…",

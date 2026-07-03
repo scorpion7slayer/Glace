@@ -77,7 +77,7 @@ struct AdvancedSettingsPane: View {
             Text(
                 """
                 Make more room in the menu bar by hiding the current app menus if \
-                needed. macOS requires Ice to make itself visible in the Dock while \
+                needed. macOS requires Glace to make itself visible in the Dock while \
                 this setting is in effect.
                 """
             )
