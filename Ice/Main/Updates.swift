@@ -42,7 +42,10 @@ final class UpdatesManager: NSObject, ObservableObject {
 
     /// The repository page for Glace releases.
     private static let releasesURL: URL = {
-        URL(string: "https://github.com/scorpion7slayer/Glace/releases/latest")!
+        guard let url = URL(string: "https://github.com/scorpion7slayer/Glace/releases/latest") else {
+            preconditionFailure("Invalid Glace releases URL")
+        }
+        return url
     }()
 
     /// A Boolean value that indicates whether the user can check for updates.

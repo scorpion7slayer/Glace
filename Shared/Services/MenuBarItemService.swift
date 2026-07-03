@@ -6,7 +6,11 @@
 import Foundation
 
 enum MenuBarItemService {
+    #if DEBUG
+    static let name = "com.theo.Glace.debug.MenuBarItemService"
+    #else
     static let name = "com.theo.Glace.MenuBarItemService"
+    #endif
 }
 
 extension MenuBarItemService {

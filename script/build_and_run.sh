@@ -2,8 +2,9 @@
 set -euo pipefail
 
 MODE="${1:-run}"
-APP_NAME="Glace"
-BUNDLE_ID="com.theo.Glace"
+APP_NAME="Glace Debug"
+BUNDLE_ID="com.theo.Glace.debug"
+DEVELOPMENT_TEAM="${GLACE_DEVELOPMENT_TEAM:-3849ST995Q}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DERIVED_DATA="$ROOT_DIR/.build/DerivedData"
 APP_BUNDLE="$DERIVED_DATA/Build/Products/Debug/$APP_NAME.app"
@@ -23,6 +24,7 @@ if ! xcodebuild -version >/dev/null 2>&1; then
 fi
 
 pkill -x "$APP_NAME" >/dev/null 2>&1 || true
+pkill -x Glace >/dev/null 2>&1 || true
 
 SIGNING_IDENTITY="${GLACE_CODE_SIGN_IDENTITY:-}"
 if [[ -z "$SIGNING_IDENTITY" ]]; then
@@ -35,17 +37,13 @@ if [[ -n "$SIGNING_IDENTITY" ]]; then
   SIGNING_ARGUMENTS=(
     "CODE_SIGN_IDENTITY=$SIGNING_IDENTITY"
     CODE_SIGN_STYLE=Manual
-    DEVELOPMENT_TEAM=
+    "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM"
     CODE_SIGNING_ALLOWED=YES
   )
 else
-  echo "Warning: no Apple Development identity found; permissions may need to be granted after each build." >&2
-  SIGNING_ARGUMENTS=(
-    CODE_SIGN_IDENTITY=-
-    CODE_SIGN_STYLE=Manual
-    DEVELOPMENT_TEAM=
-    CODE_SIGNING_ALLOWED=YES
-  )
+  echo "An Apple Development signing identity is required on macOS 26 and later." >&2
+  echo "Add your Apple account in Xcode or set GLACE_CODE_SIGN_IDENTITY explicitly." >&2
+  exit 1
 fi
 
 xcodebuild \
@@ -56,7 +54,7 @@ xcodebuild \
   -derivedDataPath "$DERIVED_DATA" \
   ONLY_ACTIVE_ARCH=YES \
   "${SIGNING_ARGUMENTS[@]}" \
-  build
+  clean build
 
 open_app() {
   /usr/bin/open -n "$APP_BUNDLE"

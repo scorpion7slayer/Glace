@@ -16,11 +16,17 @@ struct AboutSettingsPane: View {
     }
 
     private var contributeURL: URL {
-        URL(string: "https://github.com/scorpion7slayer/Glace")!
+        guard let url = URL(string: "https://github.com/scorpion7slayer/Glace") else {
+            preconditionFailure("Invalid Glace repository URL")
+        }
+        return url
     }
 
     private var originalProjectURL: URL {
-        URL(string: "https://github.com/jordanbaird/Ice")!
+        guard let url = URL(string: "https://github.com/jordanbaird/Ice") else {
+            preconditionFailure("Invalid Ice repository URL")
+        }
+        return url
     }
 
     private var issuesURL: URL {
@@ -28,7 +34,10 @@ struct AboutSettingsPane: View {
     }
 
     private var donateURL: URL {
-        URL(string: "https://icemenubar.app/Donate")!
+        guard let url = URL(string: "https://icemenubar.app/Donate") else {
+            preconditionFailure("Invalid donation URL")
+        }
+        return url
     }
 
     private var lastUpdateCheckString: String {
