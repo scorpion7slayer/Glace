@@ -167,13 +167,20 @@ final class ScreenRecordingPermission: Permission {
         let details: [String]
         let requestButtonTitle: String
 
-        if #available(macOS 26.0, *) {
+        if #available(macOS 27.0, *) {
             details = [
                 "Change the menu bar's appearance.",
                 "Display images of individual menu bar items.",
-                "Use the + button in System Settings to add this app.",
+                "Use the + button in System Settings to add \(Constants.displayName).",
             ]
             requestButtonTitle = "Open System Settings"
+        } else if #available(macOS 26.0, *) {
+            details = [
+                "Change the menu bar's appearance.",
+                "Display images of individual menu bar items.",
+                "Approve Glace in System Settings when prompted.",
+            ]
+            requestButtonTitle = "Grant Permission"
         } else {
             details = [
                 "Change the menu bar's appearance.",
