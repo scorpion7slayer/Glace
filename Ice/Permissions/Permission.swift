@@ -24,6 +24,9 @@ class Permission: ObservableObject, Identifiable {
     /// A Boolean value that indicates if the app can work without this permission.
     let isRequired: Bool
 
+    /// The title shown by buttons that initiate the permission flow.
+    let requestButtonTitle: String
+
     /// The URL of the settings pane to open.
     private let settingsURL: URL?
 
@@ -45,6 +48,7 @@ class Permission: ObservableObject, Identifiable {
     ///   - title: The title of the permission.
     ///   - details: Descriptive details for the permission.
     ///   - isRequired: A Boolean value that indicates if the app can work without this permission.
+    ///   - requestButtonTitle: The title shown by buttons that initiate the permission flow.
     ///   - settingsURL: The URL of the settings pane to open.
     ///   - check: A function that checks permissions.
     ///   - request: A function that requests permissions.
@@ -52,6 +56,7 @@ class Permission: ObservableObject, Identifiable {
         title: String,
         details: [String],
         isRequired: Bool,
+        requestButtonTitle: String = "Grant Permission",
         settingsURL: URL?,
         check: @escaping () -> Bool,
         request: @escaping () -> Void
@@ -59,6 +64,7 @@ class Permission: ObservableObject, Identifiable {
         self.title = title
         self.details = details
         self.isRequired = isRequired
+        self.requestButtonTitle = requestButtonTitle
         self.settingsURL = settingsURL
         self.check = check
         self.request = request
@@ -158,13 +164,29 @@ final class AccessibilityPermission: Permission {
 
 final class ScreenRecordingPermission: Permission {
     init() {
-        super.init(
-            title: "Screen Recording",
-            details: [
+        let details: [String]
+        let requestButtonTitle: String
+
+        if #available(macOS 26.0, *) {
+            details = [
                 "Change the menu bar's appearance.",
                 "Display images of individual menu bar items.",
-            ],
+                "Use the + button in System Settings to add this app.",
+            ]
+            requestButtonTitle = "Open System Settings"
+        } else {
+            details = [
+                "Change the menu bar's appearance.",
+                "Display images of individual menu bar items.",
+            ]
+            requestButtonTitle = "Grant Permission"
+        }
+
+        super.init(
+            title: "Screen Recording",
+            details: details,
             isRequired: false,
+            requestButtonTitle: requestButtonTitle,
             settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"),
             check: {
                 // Keep the shared capture cache synchronized with changes made

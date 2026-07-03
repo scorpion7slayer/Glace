@@ -164,7 +164,7 @@ struct PermissionsView: View {
                         Text("Permission Granted")
                             .foregroundStyle(.green)
                     } else {
-                        Text("Grant Permission")
+                        Text(permission.requestButtonTitle)
                     }
                 }
                 .allowsHitTesting(!permission.hasPermission)

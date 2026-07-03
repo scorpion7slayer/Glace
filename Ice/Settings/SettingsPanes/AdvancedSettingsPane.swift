@@ -95,7 +95,7 @@ struct AdvancedSettingsPane: View {
             Text(
                 """
                 Right-click in an empty area of the menu bar to display a minimal \
-                version of Ice's menu. Disable this setting if you encounter conflicts \
+                version of Glace's menu. Disable this setting if you encounter conflicts \
                 with other apps.
                 """
             )
@@ -153,7 +153,7 @@ struct AdvancedSettingsPane: View {
                             .foregroundStyle(.green)
                     }
                 } else {
-                    Button("Grant Permission") {
+                    Button(permission.requestButtonTitle) {
                         permission.performRequest()
                     }
                 }

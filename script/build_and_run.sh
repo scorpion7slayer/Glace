@@ -7,7 +7,9 @@ BUNDLE_ID="com.theo.Glace.debug"
 DEVELOPMENT_TEAM="${GLACE_DEVELOPMENT_TEAM:-3849ST995Q}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DERIVED_DATA="$ROOT_DIR/.build/DerivedData"
-APP_BUNDLE="$DERIVED_DATA/Build/Products/Debug/$APP_NAME.app"
+BUILT_APP_BUNDLE="$DERIVED_DATA/Build/Products/Debug/$APP_NAME.app"
+BUILT_APP_BINARY="$BUILT_APP_BUNDLE/Contents/MacOS/$APP_NAME"
+APP_BUNDLE="${GLACE_DEBUG_APP_PATH:-$HOME/Applications/$APP_NAME.app}"
 APP_BINARY="$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 
 if [[ -z "${DEVELOPER_DIR:-}" ]]; then
@@ -23,7 +25,8 @@ if ! xcodebuild -version >/dev/null 2>&1; then
   exit 1
 fi
 
-pkill -x "$APP_NAME" >/dev/null 2>&1 || true
+pkill -f -x "$APP_BINARY" >/dev/null 2>&1 || true
+pkill -f -x "$BUILT_APP_BINARY" >/dev/null 2>&1 || true
 pkill -x Glace >/dev/null 2>&1 || true
 
 SIGNING_IDENTITY="${GLACE_CODE_SIGN_IDENTITY:-}"
@@ -56,6 +59,11 @@ xcodebuild \
   "${SIGNING_ARGUMENTS[@]}" \
   clean build
 
+mkdir -p "$(dirname "$APP_BUNDLE")"
+rm -rf "$APP_BUNDLE"
+/usr/bin/ditto "$BUILT_APP_BUNDLE" "$APP_BUNDLE"
+/usr/bin/codesign --verify --deep --strict "$APP_BUNDLE"
+
 open_app() {
   /usr/bin/open -n "$APP_BUNDLE"
 }
@@ -78,7 +86,7 @@ case "$MODE" in
   --verify|verify)
     open_app
     sleep 2
-    pgrep -x "$APP_NAME" >/dev/null
+    pgrep -f -x "$APP_BINARY" >/dev/null
     ;;
   *)
     echo "usage: $0 [run|--debug|--logs|--telemetry|--verify]" >&2

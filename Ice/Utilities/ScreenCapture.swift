@@ -46,11 +46,15 @@ enum ScreenCapture {
 
     /// Requests screen capture permissions.
     static func requestPermissions() {
-        if #available(macOS 15.0, *) {
+        if #available(macOS 26.0, *) {
+            // On Tahoe and later, querying SCShareableContent no longer
+            // registers the app in Privacy & Security. Use the dedicated
+            // CoreGraphics request API so macOS creates the TCC entry.
+            CGRequestScreenCaptureAccess()
+        } else if #available(macOS 15.0, *) {
             // CGRequestScreenCaptureAccess() is broken on macOS 15. We can
             // try accessing SCShareableContent to trigger a request if the
             // user doesn't have permissions.
-            // TODO: Find out if we still need this as of macOS 26.
             SCShareableContent.getWithCompletionHandler { _, _ in }
         } else {
             CGRequestScreenCaptureAccess()
