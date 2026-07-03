@@ -14,16 +14,35 @@ struct SettingsWindow: Scene {
 
     var body: some Scene {
         IceWindow(id: .settings) {
-            SettingsView(navigationState: appState.navigationState)
+            SettingsWindowContent(appState: appState)
                 .onWindowChange { window in
                     model.observeWindowToolbar(window)
+                    if window != nil {
+                        DispatchQueue.main.async {
+                            (NSApp.delegate as? AppDelegate)?.installApplicationMenu()
+                        }
+                    }
                 }
                 .frame(minWidth: 825, maxWidth: 1150, minHeight: 500, maxHeight: 750)
         }
-        .commandsRemoved()
         .windowResizability(.contentSize)
         .defaultSize(width: 900, height: 625)
         .environmentObject(appState)
+    }
+}
+
+private struct SettingsWindowContent: View {
+    @ObservedObject var generalSettings: GeneralSettings
+    let appState: AppState
+
+    init(appState: AppState) {
+        self.appState = appState
+        self.generalSettings = appState.settings.general
+    }
+
+    var body: some View {
+        SettingsView(navigationState: appState.navigationState)
+            .environment(\.locale, generalSettings.appLanguage.locale)
     }
 }
 

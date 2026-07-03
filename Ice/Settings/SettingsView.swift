@@ -53,8 +53,10 @@ struct SettingsView: View {
         appearsActive ? .primary : .secondary
     }
 
-    private var navigationTitle: LocalizedStringKey {
-        navigationState.settingsNavigationIdentifier.localized
+    private var navigationTitle: String {
+        appState.settings.general.appLanguage.localized(
+            navigationState.settingsNavigationIdentifier.rawValue
+        )
     }
 
     var body: some View {
@@ -63,7 +65,7 @@ struct SettingsView: View {
         } detail: {
             detailView
         }
-        .navigationTitle(navigationTitle)
+        .navigationTitle(Text(verbatim: navigationTitle))
     }
 
     @ViewBuilder

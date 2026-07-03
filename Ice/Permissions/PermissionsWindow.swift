@@ -10,7 +10,7 @@ struct PermissionsWindow: Scene {
 
     var body: some Scene {
         IceWindow(id: .permissions) {
-            PermissionsView()
+            PermissionsWindowContent(generalSettings: appState.settings.general)
                 .onWindowChange { window in
                     guard let window else {
                         return
@@ -33,5 +33,14 @@ struct PermissionsWindow: Scene {
         .windowStyle(.hiddenTitleBar)
         .environmentObject(appState)
         .environmentObject(appState.permissions)
+    }
+}
+
+private struct PermissionsWindowContent: View {
+    @ObservedObject var generalSettings: GeneralSettings
+
+    var body: some View {
+        PermissionsView()
+            .environment(\.locale, generalSettings.appLanguage.locale)
     }
 }

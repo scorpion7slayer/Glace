@@ -23,7 +23,7 @@
 
 ## macOS compatibility
 
-Glace 0.12.0 incorporates Ice's macOS 26 Tahoe architecture updates, including its redesigned menu bar item discovery, event monitoring, XPC-backed source lookup, capture handling, and Tahoe-specific UI behavior.
+Glace 2.0.0 incorporates Ice's macOS 26 Tahoe architecture updates, including its redesigned menu bar item discovery, event monitoring, XPC-backed source lookup, capture handling, and Tahoe-specific UI behavior.
 
 The project also builds and launches with Xcode 27 and the macOS 27 SDK on macOS 27 GoldenGate. GoldenGate no longer exposes individual status items as WindowServer windows, so Glace uses Accessibility to detect the items published by `MenuBarAgent` and presents the native macOS overflow workflow instead of leaving the layout editor in an endless loading state. Legacy divider-based drag management remains available through macOS 26.
 

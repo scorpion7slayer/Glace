@@ -138,6 +138,7 @@ enum Defaults {
 extension Defaults {
     enum Key: String {
         // MARK: General Settings
+        case appLanguage = "AppLanguage"
         case showIceIcon = "ShowIceIcon"
         case iceIcon = "IceIcon"
         case customIceIconIsTemplate = "CustomIceIconIsTemplate"
