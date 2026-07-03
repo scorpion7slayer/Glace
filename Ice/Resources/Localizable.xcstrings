@@ -651,6 +651,16 @@
         }
       }
     },
+    "Glace appearance overlays remain available on GoldenGate. Apple still controls menu bar item placement with the system double arrow.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les superpositions d’apparence de Glace restent disponibles sur GoldenGate. Apple contrôle toujours la disposition des éléments avec la double flèche du système."
+          }
+        }
+      }
+    },
     "Glace is a fork of Ice by Jordan Baird.": {
       "localizations": {
         "fr": {
@@ -707,6 +717,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "GoldenGate regroupe les éléments supplémentaires derrière la double flèche. Glace les détecte grâce à Accessibilité, mais macOS ne permet plus à l’ancien système de séparateurs et de glisser-déposer de les déplacer de manière fiable."
+          }
+        }
+      }
+    },
+    "GoldenGate manages hidden sections, item placement, and reveal behavior. Glace disables the legacy advanced controls here because they cannot be applied reliably on macOS 27.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GoldenGate gère les sections masquées, la disposition des éléments et leur affichage. Glace désactive ici les anciennes commandes avancées, car elles ne peuvent pas être appliquées de façon fiable sous macOS 27."
           }
         }
       }
@@ -1507,6 +1527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Soutenir Glace"
+          }
+        }
+      }
+    },
+    "System-managed menu bar": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barre des menus gérée par le système"
           }
         }
       }

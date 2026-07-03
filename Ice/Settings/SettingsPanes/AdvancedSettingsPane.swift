@@ -25,19 +25,42 @@ struct AdvancedSettingsPane: View {
 
     var body: some View {
         IceForm {
-            IceSection("Menu Bar Sections") {
-                enableAlwaysHiddenSection
-                showAllSectionsOnUserDrag
-                sectionDividerStyle
-            }
-            IceSection("Other") {
-                hideApplicationMenus
-                enableSecondaryContextMenu
-                showOnHoverDelay
-                tempShowInterval
+            if #available(macOS 27.0, *) {
+                IceSection {
+                    goldenGateCompatibility
+                }
+            } else {
+                IceSection("Menu Bar Sections") {
+                    enableAlwaysHiddenSection
+                    showAllSectionsOnUserDrag
+                    sectionDividerStyle
+                }
+                IceSection("Other") {
+                    hideApplicationMenus
+                    enableSecondaryContextMenu
+                    showOnHoverDelay
+                    tempShowInterval
+                }
             }
             IceSection("Permissions") {
                 allPermissions
+            }
+        }
+    }
+
+    @available(macOS 27.0, *)
+    private var goldenGateCompatibility: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("System-managed menu bar", systemImage: "chevron.left.2")
+                .font(.headline)
+            Text("GoldenGate manages hidden sections, item placement, and reveal behavior. Glace disables the legacy advanced controls here because they cannot be applied reliably on macOS 27.")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button("Open Menu Bar Settings") {
+                guard let url = URL(string: "x-apple.systempreferences:com.apple.ControlCenter-Settings.extension") else {
+                    return
+                }
+                NSWorkspace.shared.open(url)
             }
         }
     }
@@ -60,10 +83,12 @@ struct AdvancedSettingsPane: View {
 
     @ViewBuilder
     private var sectionDividerStyle: some View {
-        IcePicker("Section divider style", selection: $settings.sectionDividerStyle) {
-            ForEach(SectionDividerStyle.allCases) { style in
-                Text(style.localized).tag(style)
-            }
+        IceMenuPicker(
+            "Section divider style",
+            selection: $settings.sectionDividerStyle,
+            options: SectionDividerStyle.allCases
+        ) { style in
+            Text(style.localized)
         }
     }
 

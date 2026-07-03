@@ -7,7 +7,7 @@
 - an `appcast.xml`
 - a Sparkle EdDSA signature generated from the private key matching `SUPublicEDKey`
 
-The GitHub Actions workflow in `.github/workflows/release.yml` handles this on every GitHub release publication.
+The GitHub Actions workflow in `.github/workflows/release.yml` handles this when a GitHub release is published. Tag pushes alone do not publish binaries, which prevents duplicate release jobs.
 
 ## Required repository secrets
 
@@ -23,8 +23,10 @@ The GitHub Actions workflow in `.github/workflows/release.yml` handles this on e
 
 - Enable GitHub Pages for this repository.
 - Publish Pages from the `gh-pages` branch.
+- Keep the repository secrets above available to the protected `release` environment.
 - Create a GitHub release to trigger the workflow.
-- Use a release tag like `v0.11.13` or `0.11.13`. The workflow derives `MARKETING_VERSION` from the tag and uses the GitHub Actions run number as `CFBundleVersion`.
+- Use a release tag in the exact form `vMAJOR.MINOR.PATCH`, for example `v2.0.0`.
+- Bump `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in the Xcode project before publishing. The workflow refuses to publish when the tag and project version differ, and it preserves the project build number so Sparkle always sees a newer build.
 
 The workflow will:
 
@@ -34,3 +36,12 @@ The workflow will:
 4. generate release notes HTML and `appcast.xml`
 5. push update metadata to `gh-pages`
 6. upload the `.dmg` as a GitHub release asset
+7. publish a GitHub artifact provenance attestation
+
+## Glace 2.0 release checklist
+
+1. Confirm `MARKETING_VERSION = 2.0.0` and `CURRENT_PROJECT_VERSION = 2000`.
+2. Merge the release changes and wait for lint, CodeQL, and website publication.
+3. Create `v2.0.0` from the verified `main` commit with the contents of `RELEASE_NOTES.md`.
+4. Publish the GitHub release once. The release workflow signs, notarizes, staples, attests, and uploads `Glace-2.0.0.dmg`.
+5. Verify the DMG with `gh attestation verify`, Gatekeeper, and the public Sparkle appcast.

@@ -54,9 +54,16 @@ struct MenuBarAppearanceEditor: View {
     @ViewBuilder
     private var mainForm: some View {
         IceForm {
+            if #available(macOS 27.0, *) {
+                CalloutBox(
+                    "Glace appearance overlays remain available on GoldenGate. Apple still controls menu bar item placement with the system double arrow.",
+                    systemImage: "chevron.left.2"
+                )
+            }
             if
                 case .settings = location,
-                appState.settings.advanced.enableSecondaryContextMenu
+                appState.settings.advanced.enableSecondaryContextMenu,
+                #unavailable(macOS 27.0)
             {
                 CalloutBox(
                     "Tip: You can also edit these settings by right-clicking in an empty area of the menu bar.",
@@ -156,10 +163,12 @@ private struct UnlabeledPartialEditor: View {
     private var tintPicker: some View {
         LabeledContent("Tint") {
             HStack {
-                IcePicker("Tint", selection: $configuration.tintKind) {
-                    ForEach(MenuBarTintKind.allCases) { tintKind in
-                        Text(tintKind.localized).tag(tintKind)
-                    }
+                IceMenuPicker(
+                    "Tint",
+                    selection: $configuration.tintKind,
+                    options: MenuBarTintKind.allCases
+                ) { tintKind in
+                    Text(tintKind.localized)
                 }
                 .labelsHidden()
 
@@ -210,13 +219,12 @@ private struct UnlabeledPartialEditor: View {
     @ViewBuilder
     private var borderWidth: some View {
         if configuration.hasBorder {
-            IcePicker(
+            IceMenuPicker(
                 "Border Width",
-                selection: $configuration.borderWidth
-            ) {
-                Text("1").tag(1.0)
-                Text("2").tag(2.0)
-                Text("3").tag(3.0)
+                selection: $configuration.borderWidth,
+                options: [1.0, 2.0, 3.0]
+            ) { width in
+                Text(width.formatted())
             }
         }
     }
