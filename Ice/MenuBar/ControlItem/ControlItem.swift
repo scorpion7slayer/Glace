@@ -257,6 +257,19 @@ final class ControlItem {
             .store(in: &c)
 
         if let appState {
+            if #available(macOS 27.0, *) {
+                appState.settings.general.$appLanguage
+                    .removeDuplicates()
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self, weak appState] _ in
+                        guard let self, let appState else {
+                            return
+                        }
+                        installSystemManagedMenu(with: appState)
+                    }
+                    .store(in: &c)
+            }
+
             appState.$isDraggingMenuBarItem
                 .removeDuplicates()
                 .receive(on: DispatchQueue.main)
@@ -467,8 +480,7 @@ final class ControlItem {
         switch event.type {
         case .leftMouseDown:
             if #available(macOS 27.0, *) {
-                appState.navigationState.settingsNavigationIdentifier = .menuBarLayout
-                (NSApp.delegate as? AppDelegate)?.openSettingsWindow()
+                showMenu()
                 return
             }
 
@@ -507,6 +519,12 @@ final class ControlItem {
 
     /// Creates a menu to show under the control item.
     private func createMenu(with appState: AppState) -> NSMenu {
+        let language = appState.settings.general.appLanguage
+
+        func localized(_ key: String) -> String {
+            language.localized(key)
+        }
+
         func hotkey(withAction action: HotkeyAction) -> Hotkey? {
             appState.settings.hotkeys.hotkey(withAction: action)
         }
@@ -514,7 +532,7 @@ final class ControlItem {
         let menu = NSMenu(title: "Glace")
 
         let settingsItem = NSMenuItem(
-            title: String(localized: "Glace Settings…"),
+            title: localized("Glace Settings…"),
             action: #selector(AppDelegate.openSettingsWindow),
             keyEquivalent: ","
         )
@@ -523,55 +541,68 @@ final class ControlItem {
 
         menu.addItem(.separator())
 
-        let searchItem = NSMenuItem(
-            title: String(localized: "Search Menu Bar Items"),
-            action: #selector(showSearchPanel),
-            keyEquivalent: ""
-        )
-        if
-            let hotkey = hotkey(withAction: .searchMenuBarItems),
-            let keyCombination = hotkey.keyCombination
-        {
-            searchItem.keyEquivalent = keyCombination.key.keyEquivalent
-            searchItem.keyEquivalentModifierMask = keyCombination.modifiers.nsEventFlags
-        }
-        searchItem.target = self
-        menu.addItem(searchItem)
-
-        menu.addItem(.separator())
-
-        // Add items to toggle the hidden and always-hidden sections.
-        for name: MenuBarSection.Name in [.hidden, .alwaysHidden] {
-            guard
-                let section = appState.menuBarManager.section(withName: name),
-                section.isEnabled
-            else {
-                continue
-            }
-            let titleFormat = section.isHidden
-                ? String(localized: "Show %@ Section")
-                : String(localized: "Hide %@ Section")
-            let item = NSMenuItem(
-                title: String(format: titleFormat, name.localizedString),
-                action: #selector(toggleMenuBarSection),
+        if #available(macOS 27.0, *) {
+            let menuBarSettingsItem = NSMenuItem(
+                title: localized("Menu Bar Settings…"),
+                action: #selector(openMenuBarSettings),
+                keyEquivalent: ""
+            )
+            menuBarSettingsItem.target = self
+            menu.addItem(menuBarSettingsItem)
+        } else {
+            let searchItem = NSMenuItem(
+                title: localized("Search Menu Bar Items"),
+                action: #selector(showSearchPanel),
                 keyEquivalent: ""
             )
             if
-                let hotkey = section.hotkey,
+                let hotkey = hotkey(withAction: .searchMenuBarItems),
                 let keyCombination = hotkey.keyCombination
             {
-                item.keyEquivalent = keyCombination.key.keyEquivalent
-                item.keyEquivalentModifierMask = keyCombination.modifiers.nsEventFlags
+                searchItem.keyEquivalent = keyCombination.key.keyEquivalent
+                searchItem.keyEquivalentModifierMask = keyCombination.modifiers.nsEventFlags
             }
-            item.target = self
-            item.representedObject = section
-            menu.addItem(item)
+            searchItem.target = self
+            menu.addItem(searchItem)
+
+            menu.addItem(.separator())
+
+            // Add items to toggle the hidden and always-hidden sections.
+            for name: MenuBarSection.Name in [.hidden, .alwaysHidden] {
+                guard
+                    let section = appState.menuBarManager.section(withName: name),
+                    section.isEnabled
+                else {
+                    continue
+                }
+                let titleFormat = section.isHidden
+                    ? localized("Show %@ Section")
+                    : localized("Hide %@ Section")
+                let item = NSMenuItem(
+                    title: String(
+                        format: titleFormat,
+                        language.localized(name.displayString)
+                    ),
+                    action: #selector(toggleMenuBarSection),
+                    keyEquivalent: ""
+                )
+                if
+                    let hotkey = section.hotkey,
+                    let keyCombination = hotkey.keyCombination
+                {
+                    item.keyEquivalent = keyCombination.key.keyEquivalent
+                    item.keyEquivalentModifierMask = keyCombination.modifiers.nsEventFlags
+                }
+                item.target = self
+                item.representedObject = section
+                menu.addItem(item)
+            }
         }
 
         menu.addItem(.separator())
 
         let checkForUpdatesItem = NSMenuItem(
-            title: String(localized: "Check for Updates…"),
+            title: localized("Check for Updates…"),
             action: #selector(checkForUpdates),
             keyEquivalent: ""
         )
@@ -581,7 +612,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: String(localized: "Quit Glace"),
+            title: localized("Quit Glace"),
             action: #selector(NSApp.terminate),
             keyEquivalent: "q"
         )
@@ -589,6 +620,15 @@ final class ControlItem {
         menu.addItem(quitItem)
 
         return menu
+    }
+
+    /// Installs a native pull-down menu for GoldenGate's remotely hosted item.
+    @available(macOS 27.0, *)
+    private func installSystemManagedMenu(with appState: AppState) {
+        guard identifier == .visible else {
+            return
+        }
+        statusItem.menu = createMenu(with: appState)
     }
 
     /// Shows the control item's menu.
@@ -611,6 +651,14 @@ final class ControlItem {
     /// Opens the menu bar search panel.
     @objc private func showSearchPanel() {
         appState?.menuBarManager.searchPanel.show()
+    }
+
+    /// Opens the native settings used to allow and arrange menu bar items.
+    @objc private func openMenuBarSettings() {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.ControlCenter-Settings.extension") else {
+            return
+        }
+        NSWorkspace.shared.open(url)
     }
 
     /// Opens the settings window and checks for app updates.

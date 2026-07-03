@@ -81,8 +81,25 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var appOptions: some View {
+        IceMenu("Language") {
+            ForEach(AppLanguage.allCases) { language in
+                Button {
+                    settings.appLanguage = language
+                } label: {
+                    if settings.appLanguage == language {
+                        Label(language.displayName, systemImage: "checkmark")
+                    } else {
+                        Text(verbatim: language.displayName)
+                    }
+                }
+            }
+        } title: {
+            Text(verbatim: settings.appLanguage.displayName)
+        }
+        .annotation("Changes are applied immediately.")
+
         LaunchAtLogin.Toggle {
-            Text(verbatim: String(localized: "Launch at login", bundle: .main))
+            Text(verbatim: settings.appLanguage.localized("Launch at login"))
         }
     }
 
@@ -216,9 +233,8 @@ struct GeneralSettingsPane: View {
         Toggle("Use Glace Bar", isOn: $settings.useIceBar)
             .annotation {
                 Text(
-                    verbatim: String(
-                        localized: "Show hidden menu bar items in a separate bar below the menu bar.",
-                        bundle: .main
+                    verbatim: settings.appLanguage.localized(
+                        "Show hidden menu bar items in a separate bar below the menu bar."
                     )
                 )
             }

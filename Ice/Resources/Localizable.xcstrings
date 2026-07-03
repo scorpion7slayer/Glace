@@ -51,6 +51,16 @@
         }
       }
     },
+    "About Glace": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À propos de Glace"
+          }
+        }
+      }
+    },
     "Absolutely no personal information is collected or stored.": {
       "localizations": {
         "fr": {
@@ -267,6 +277,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Modifier l'apparence de la barre des menus."
+          }
+        }
+      }
+    },
+    "Changes are applied immediately.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les modifications sont appliquées immédiatement."
           }
         }
       }
@@ -731,6 +751,26 @@
         }
       }
     },
+    "Hide Glace": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer Glace"
+          }
+        }
+      }
+    },
+    "Hide Others": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer les autres"
+          }
+        }
+      }
+    },
     "Hide app menus when showing menu bar items": {
       "localizations": {
         "fr": {
@@ -801,6 +841,16 @@
         }
       }
     },
+    "Language": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langue"
+          }
+        }
+      }
+    },
     "Last checked: %@": {
       "localizations": {
         "fr": {
@@ -867,6 +917,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apparence de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu Bar Settings…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages Barre des menus…"
           }
         }
       }
@@ -1307,6 +1367,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Afficher la section %@"
+          }
+        }
+      }
+    },
+    "Show All": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout afficher"
           }
         }
       }

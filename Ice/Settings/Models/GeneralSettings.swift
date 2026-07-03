@@ -12,6 +12,9 @@ import SwiftUI
 /// Model for the app's General settings.
 @MainActor
 final class GeneralSettings: ObservableObject {
+    /// The language used by Glace's interface.
+    @Published var appLanguage = AppLanguage.stored
+
     /// A Boolean value that indicates whether the Ice icon
     /// should be shown.
     @Published var showIceIcon = true
@@ -84,6 +87,11 @@ final class GeneralSettings: ObservableObject {
 
     /// Loads the model's initial state.
     private func loadInitialState() {
+        if let rawValue = Defaults.string(forKey: .appLanguage),
+           let language = AppLanguage(rawValue: rawValue)
+        {
+            appLanguage = language
+        }
         Defaults.ifPresent(key: .showIceIcon, assign: &showIceIcon)
         Defaults.ifPresent(key: .customIceIconIsTemplate, assign: &customIceIconIsTemplate)
         Defaults.ifPresent(key: .useIceBar, assign: &useIceBar)
@@ -120,6 +128,14 @@ final class GeneralSettings: ObservableObject {
     /// Configures the internal observers for the model.
     private func configureCancellables() {
         var c = Set<AnyCancellable>()
+
+        $appLanguage
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { language in
+                Defaults.set(language.rawValue, forKey: .appLanguage)
+            }
+            .store(in: &c)
 
         $showIceIcon
             .receive(on: DispatchQueue.main)
