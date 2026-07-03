@@ -87,8 +87,9 @@ final class GeneralSettings: ObservableObject {
 
     /// Loads the model's initial state.
     private func loadInitialState() {
-        if let rawValue = Defaults.string(forKey: .appLanguage),
-           let language = AppLanguage(rawValue: rawValue)
+        if
+            let rawValue = Defaults.string(forKey: .appLanguage),
+            let language = AppLanguage(rawValue: rawValue)
         {
             appLanguage = language
         }
