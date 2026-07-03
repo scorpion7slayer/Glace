@@ -25,8 +25,23 @@ if ! xcodebuild -version >/dev/null 2>&1; then
   exit 1
 fi
 
-pkill -f -x "$APP_BINARY" >/dev/null 2>&1 || true
-pkill -f -x "$BUILT_APP_BINARY" >/dev/null 2>&1 || true
+stop_process() {
+  local executable="$1"
+  local attempts=0
+
+  pkill -TERM -f -x "$executable" >/dev/null 2>&1 || true
+  while pgrep -f -x "$executable" >/dev/null 2>&1; do
+    if (( attempts >= 50 )); then
+      pkill -KILL -f -x "$executable" >/dev/null 2>&1 || true
+      break
+    fi
+    sleep 0.1
+    attempts=$((attempts + 1))
+  done
+}
+
+stop_process "$APP_BINARY"
+stop_process "$BUILT_APP_BINARY"
 pkill -x Glace >/dev/null 2>&1 || true
 
 SIGNING_IDENTITY="${GLACE_CODE_SIGN_IDENTITY:-}"
@@ -63,6 +78,10 @@ mkdir -p "$(dirname "$APP_BUNDLE")"
 rm -rf "$APP_BUNDLE"
 /usr/bin/ditto "$BUILT_APP_BUNDLE" "$APP_BUNDLE"
 /usr/bin/codesign --verify --deep --strict "$APP_BUNDLE"
+
+# A development tool may reopen the app while Xcode is building. Ensure the
+# staged bundle has no surviving process before launching the fresh copy.
+stop_process "$APP_BINARY"
 
 open_app() {
   /usr/bin/open -n "$APP_BUNDLE"

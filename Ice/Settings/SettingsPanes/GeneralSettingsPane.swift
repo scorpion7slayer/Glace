@@ -35,23 +35,44 @@ struct GeneralSettingsPane: View {
 
     var body: some View {
         IceForm {
+            if #available(macOS 27.0, *) {
+                IceSection {
+                    macOS27Compatibility
+                }
+            }
             IceSection {
                 appOptions
             }
             IceSection {
                 iceIconOptions
             }
-            IceSection {
-                iceBarOptions
+            if #unavailable(macOS 27.0) {
+                IceSection {
+                    iceBarOptions
+                }
+                IceSection {
+                    showOptions
+                }
+                IceSection {
+                    rehideOptions
+                }
+                IceSection {
+                    spacingOptions
+                }
             }
-            IceSection {
-                showOptions
-            }
-            IceSection {
-                rehideOptions
-            }
-            IceSection {
-                spacingOptions
+        }
+    }
+
+    @available(macOS 27.0, *)
+    private var macOS27Compatibility: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("GoldenGate Compatibility Mode", systemImage: "chevron.left.2")
+                .font(.headline)
+            Text("macOS 27 manages hidden and overflow items with its double arrow. Glace keeps the legacy hide, reveal, and spacing controls disabled on this system to avoid conflicts.")
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button("Review Detected Items") {
+                appState.navigationState.settingsNavigationIdentifier = .menuBarLayout
             }
         }
     }
@@ -60,7 +81,9 @@ struct GeneralSettingsPane: View {
 
     @ViewBuilder
     private var appOptions: some View {
-        LaunchAtLogin.Toggle()
+        LaunchAtLogin.Toggle {
+            Text(verbatim: String(localized: "Launch at login", bundle: .main))
+        }
     }
 
     // MARK: Ice Icon Options
@@ -76,7 +99,15 @@ struct GeneralSettingsPane: View {
     @ViewBuilder
     private var showIceIcon: some View {
         Toggle("Show Glace icon", isOn: $settings.showIceIcon)
-            .annotation("Click to show hidden menu bar items. Right-click to access Glace's settings.")
+            .annotation(showIceIconAnnotation)
+    }
+
+    private var showIceIconAnnotation: LocalizedStringKey {
+        if #available(macOS 27.0, *) {
+            "Click to review detected menu bar items. Right-click to access Glace's settings."
+        } else {
+            "Click to show hidden menu bar items. Right-click to access Glace's settings."
+        }
     }
 
     @ViewBuilder
@@ -183,7 +214,14 @@ struct GeneralSettingsPane: View {
     @ViewBuilder
     private var useIceBar: some View {
         Toggle("Use Glace Bar", isOn: $settings.useIceBar)
-            .annotation("Show hidden menu bar items in a separate bar below the menu bar.")
+            .annotation {
+                Text(
+                    verbatim: String(
+                        localized: "Show hidden menu bar items in a separate bar below the menu bar.",
+                        bundle: .main
+                    )
+                )
+            }
     }
 
     @ViewBuilder

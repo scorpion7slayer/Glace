@@ -43,11 +43,12 @@ struct IceForm<Content: View>: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                contentLayout.frame(
-                    maxWidth: geometry.size.width,
-                    minHeight: geometry.size.height,
-                    alignment: .top
-                )
+                glassContentLayout
+                    .frame(
+                        maxWidth: geometry.size.width,
+                        minHeight: geometry.size.height,
+                        alignment: .top
+                    )
             }
             .scrollContentBackground(.hidden)
             .scrollIndicatorsFlash(onAppear: true)
@@ -66,6 +67,17 @@ struct IceForm<Content: View>: View {
         }
         .padding(padding)
         .onFrameChange(update: $contentFrame)
+    }
+
+    @ViewBuilder
+    private var glassContentLayout: some View {
+        if #available(macOS 26.0, *) {
+            GlassEffectContainer(spacing: spacing) {
+                contentLayout
+            }
+        } else {
+            contentLayout
+        }
     }
 }
 

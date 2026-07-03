@@ -25,7 +25,11 @@
 
 Glace 0.12.0 incorporates Ice's macOS 26 Tahoe architecture updates, including its redesigned menu bar item discovery, event monitoring, XPC-backed source lookup, capture handling, and Tahoe-specific UI behavior.
 
-The project also builds and launches with Xcode 27 and the macOS 27 SDK on macOS 27 GoldenGate. Its Swift dependencies have been updated for the SDK 27 toolchain, including CompactSlider 2.1 and Sparkle 2.9.4. The deployment target remains macOS 14, so Sonoma and later remain supported.
+The project also builds and launches with Xcode 27 and the macOS 27 SDK on macOS 27 GoldenGate. GoldenGate no longer exposes individual status items as WindowServer windows, so Glace uses Accessibility to detect the items published by `MenuBarAgent` and presents the native macOS overflow workflow instead of leaving the layout editor in an endless loading state. Legacy divider-based drag management remains available through macOS 26.
+
+Settings use the system Liquid Glass material on macOS 26 and later, with the existing adaptive appearance retained on older supported releases. English is the source and fallback language; French is included and follows the user's macOS language preference.
+
+Swift dependencies have been updated for the SDK 27 toolchain, including CompactSlider 2.1 and Sparkle 2.9.4. The deployment target remains macOS 14, so Sonoma and later remain supported.
 
 Because macOS 27 and Xcode 27 are prerelease software, later Apple betas may still require follow-up adjustments.
 

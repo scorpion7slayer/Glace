@@ -1,0 +1,1746 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ Item": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Élément %@"
+          }
+        }
+      }
+    },
+    "1": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1"
+          }
+        }
+      }
+    },
+    "2": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2"
+          }
+        }
+      }
+    },
+    "3": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À propos"
+          }
+        }
+      }
+    },
+    "Absolutely no personal information is collected or stored.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune information personnelle n'est collectée ni stockée."
+          }
+        }
+      }
+    },
+    "Accessibility": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accessibilité"
+          }
+        }
+      }
+    },
+    "Accessibility permission is required to detect menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’autorisation Accessibilité est requise pour détecter les éléments de la barre des menus."
+          }
+        }
+      }
+    },
+    "Acknowledgements": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remerciements"
+          }
+        }
+      }
+    },
+    "Advanced": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avancé"
+          }
+        }
+      }
+    },
+    "Always-Hidden": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toujours masqué"
+          }
+        }
+      }
+    },
+    "Apply": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appliquer"
+          }
+        }
+      }
+    },
+    "Apply different settings based on the current system appearance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applique des réglages différents à la barre des menus en fonction de l'apparence actuelle du système (clair ou sombre). "
+          }
+        }
+      }
+    },
+    "Apply the current spacing": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appliquer l’espacement actuel"
+          }
+        }
+      }
+    },
+    "Applying this setting will relaunch all apps with menu bar items. Some apps may need to be manually relaunched.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’application de ce réglage relancera toutes les apps possédant des éléments dans la barre des menus. Certaines apps devront peut-être être relancées manuellement."
+          }
+        }
+      }
+    },
+    "Approve Glace in System Settings when prompted.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisez Glace dans Réglages Système lorsque macOS le demande."
+          }
+        }
+      }
+    },
+    "Apps add their own menu bar items. Choose which system items appear from Menu Bar settings, and use the double arrow to access overflow items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les apps ajoutent elles-mêmes leurs éléments à la barre des menus. Choisissez les éléments système visibles dans les réglages Barre des menus et utilisez la double flèche pour accéder aux éléments en surplus."
+          }
+        }
+      }
+    },
+    "Arrange menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réorganiser les éléments de la barre des menus selon vos préférences."
+          }
+        }
+      }
+    },
+    "Automatically check for updates": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier automatiquement les mises à jour"
+          }
+        }
+      }
+    },
+    "Automatically download updates": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Télécharger automatiquement les mises à jour"
+          }
+        }
+      }
+    },
+    "Automatically rehide": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer automatiquement les icônes dévoilées"
+          }
+        }
+      }
+    },
+    "BETA": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BETA"
+          }
+        }
+      }
+    },
+    "Border": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bordure"
+          }
+        }
+      }
+    },
+    "Border Color": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couleur de la bordure"
+          }
+        }
+      }
+    },
+    "Border Width": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épaisseur de la bordure"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        }
+      }
+    },
+    "Change the menu bar's appearance.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier l'apparence de la barre des menus."
+          }
+        }
+      }
+    },
+    "Check for Updates": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier les mises à jour"
+          }
+        }
+      }
+    },
+    "Check for Updates…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vérifier les mises à jour…"
+          }
+        }
+      }
+    },
+    "Chevron": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chevron"
+          }
+        }
+      }
+    },
+    "Choose a custom icon to show in the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir l’icône à afficher dans la barre des menus."
+          }
+        }
+      }
+    },
+    "Choose image…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir une image…"
+          }
+        }
+      }
+    },
+    "Click inside an empty area of the menu bar to show hidden menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez dans une zone vide de la barre des menus pour afficher les éléments masqués."
+          }
+        }
+      }
+    },
+    "Click to review detected menu bar items. Right-click to access Glace's settings.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez pour voir les éléments détectés. Faites un clic droit pour accéder aux réglages de Glace."
+          }
+        }
+      }
+    },
+    "Click to show hidden menu bar items. Right-click to access Glace's settings.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez pour afficher les éléments masqués. Faites un clic droit pour accéder aux réglages de Glace."
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
+        }
+      }
+    },
+    "Continue in Limited Mode": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer en mode limité"
+          }
+        }
+      }
+    },
+    "Contribute": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contribuer"
+          }
+        }
+      }
+    },
+    "Custom icon uses dynamic appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apparence dynamique pour l’icône personnalisée"
+          }
+        }
+      }
+    },
+    "Dark Appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apparence sombre"
+          }
+        }
+      }
+    },
+    "Detected Menu Bar Items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éléments détectés dans la barre des menus"
+          }
+        }
+      }
+    },
+    "Detecting menu bar items…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détection des éléments de la barre des menus…"
+          }
+        }
+      }
+    },
+    "Display images of individual menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les images des éléments individuels de la barre des menus."
+          }
+        }
+      }
+    },
+    "Display the icon as a monochrome image that dynamically adjusts to match the menu bar's appearance. This setting removes all color from the icon, but ensures consistent rendering with both light and dark backgrounds.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l'icône sous forme monochrome et l'adapter dynamiquement à l'apparence de la barre des menus. Ce réglage supprime les couleurs de l'icône, mais garantit un rendu cohérent sur les arrière-plans clairs et foncés."
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fait"
+          }
+        }
+      }
+    },
+    "Drag to arrange your menu bar items into different sections.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faites glisser les éléments de la barre des menus pour les organiser en différentes sections."
+          }
+        }
+      }
+    },
+    "Dynamic": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dynamique"
+          }
+        }
+      }
+    },
+    "ERROR": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ERREUR"
+          }
+        }
+      }
+    },
+    "Enable secondary context menu": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer le menu contextuel secondaire"
+          }
+        }
+      }
+    },
+    "Enable the Glace Bar": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer la « Glace Bar »"
+          }
+        }
+      }
+    },
+    "Enable the always-hidden section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer la section cachée"
+          }
+        }
+      }
+    },
+    "Focused app": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App active"
+          }
+        }
+      }
+    },
+    "Full": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pleine largeur"
+          }
+        }
+      }
+    },
+    "General": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Général"
+          }
+        }
+      }
+    },
+    "Get real-time information about the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obtenir les informations de la barre des menus en temps réel."
+          }
+        }
+      }
+    },
+    "Glace": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace"
+          }
+        }
+      }
+    },
+    "Glace Settings…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réglages de Glace…"
+          }
+        }
+      }
+    },
+    "Glace can work in a limited mode without this permission.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sans ces autorisations, Glace fonctionnera en mode restreint."
+          }
+        }
+      }
+    },
+    "Glace cannot arrange menu bar items in automatically hidden menu bars.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace ne peut pas réorganiser les éléments de la barre des menus lorsque celle-ci est masquée automatiquement."
+          }
+        }
+      }
+    },
+    "Glace cannot display menu bar items for automatically hidden menu bars": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace ne peut pas afficher les éléments lorsque la barre des menus est masquée automatiquement"
+          }
+        }
+      }
+    },
+    "Glace cannot edit the appearance of automatically hidden menu bars.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace ne peut pas modifier l'apparence de la barre des menus lorsqu'elle est masquée automatiquement."
+          }
+        }
+      }
+    },
+    "Glace could not read MenuBarAgent yet. Try refreshing after the menu bar finishes updating.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace ne peut pas encore lire MenuBarAgent. Actualisez après la mise à jour de la barre des menus."
+          }
+        }
+      }
+    },
+    "Glace icon": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icône Glace"
+          }
+        }
+      }
+    },
+    "Glace is a fork of Ice by Jordan Baird.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace est un fork d’Ice créé par Jordan Baird."
+          }
+        }
+      }
+    },
+    "Glace needs this to:": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace a besoin de cette autorisation pour :"
+          }
+        }
+      }
+    },
+    "Glace needs your permission to manage the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glace a besoin de votre autorisation pour gérer la barre des menus."
+          }
+        }
+      }
+    },
+    "Go to Advanced Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accéder aux réglages avancés"
+          }
+        }
+      }
+    },
+    "GoldenGate Compatibility Mode": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode de compatibilité GoldenGate"
+          }
+        }
+      }
+    },
+    "GoldenGate groups extra menu bar items behind the double arrow. Glace detects the items with Accessibility, but macOS no longer allows the legacy divider and drag system to move them safely.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GoldenGate regroupe les éléments supplémentaires derrière la double flèche. Glace les détecte grâce à Accessibilité, mais macOS ne permet plus à l’ancien système de séparateurs et de glisser-déposer de les déplacer de manière fiable."
+          }
+        }
+      }
+    },
+    "Gradient": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dégradée"
+          }
+        }
+      }
+    },
+    "Grant Permission": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autoriser"
+          }
+        }
+      }
+    },
+    "Hidden": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masqué"
+          }
+        }
+      }
+    },
+    "Hide %@ Section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer la section %@"
+          }
+        }
+      }
+    },
+    "Hide app menus when showing menu bar items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masquer les menus des apps lors de l'affichage des éléments de la barre des menus"
+          }
+        }
+      }
+    },
+    "Hold to Preview": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintenir pour prévisualiser"
+          }
+        }
+      }
+    },
+    "Hotkey is reserved by macOS": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce raccourci clavier est affecté à macOS"
+          }
+        }
+      }
+    },
+    "Hotkeys": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raccourcis clavier"
+          }
+        }
+      }
+    },
+    "Hover over an empty area of the menu bar to show hidden menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Survolez une zone vide de la barre des menus pour afficher les éléments masqués."
+          }
+        }
+      }
+    },
+    "Items can also be arranged by ⌘ Command + dragging them in the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez aussi maintenir la touche « ⌘ Command » enfoncée en les faisant glisser directement dans la barre des menus."
+          }
+        }
+      }
+    },
+    "Launch at login": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir à la connexion"
+          }
+        }
+      }
+    },
+    "Last checked: %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernière vérification : %@"
+          }
+        }
+      }
+    },
+    "Leading End Cap": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrémité de début"
+          }
+        }
+      }
+    },
+    "Light Appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apparence claire"
+          }
+        }
+      }
+    },
+    "Loading menu bar items…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chargement des éléments de la barre des menus…"
+          }
+        }
+      }
+    },
+    "Location": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement"
+          }
+        }
+      }
+    },
+    "Make more room in the menu bar by hiding the current app menus if needed. macOS requires Glace to make itself visible in the Dock while this setting is in effect.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libérer de l'espace dans la barre des menus en masquant, si nécessaire, les menus de l'app active. macOS exige que Glace soit visible dans le Dock tant que ce réglage est activé."
+          }
+        }
+      }
+    },
+    "Menu Bar Appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apparence de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu Bar Items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éléments de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu Bar Layout": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disposition de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu Bar Sections": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sections de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu Bar Shape": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forme de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu bar item spacing": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacement entre les éléments de la barre des menus"
+          }
+        }
+      }
+    },
+    "Menu bar items are rehidden after a fixed amount of time.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les éléments de la barre des menus sont masqués automatiquement après un délai fixe."
+          }
+        }
+      }
+    },
+    "Menu bar items are rehidden using a smart algorithm.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les éléments de la barre des menus sont automatiquement masqués à l'aide d'un algorithme intelligent."
+          }
+        }
+      }
+    },
+    "Menu bar items are rehidden when the focused app changes.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les éléments de la barre des menus sont masqués automatiquement lorsque l'application active change."
+          }
+        }
+      }
+    },
+    "Menu bar layout requires screen recording permissions.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La gestion de la barre des menus nécessite l'autorisation d'enregistrement de l'écran."
+          }
+        }
+      }
+    },
+    "Menu bar overflow is managed by macOS 27": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les éléments en surplus sont gérés par macOS 27"
+          }
+        }
+      }
+    },
+    "Mouse pointer": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pointeur souris"
+          }
+        }
+      }
+    },
+    "No Menu Bar Items Detected": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun élément détecté dans la barre des menus"
+          }
+        }
+      }
+    },
+    "No shape kind selected": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun type de forme sélectionné"
+          }
+        }
+      }
+    },
+    "None": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune"
+          }
+        }
+      }
+    },
+    "Note: You may need to log out and back in for this setting to apply properly.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remarque : vous devrez peut-être fermer puis rouvrir votre session pour appliquer correctement ce réglage."
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Open Accessibility Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les réglages Accessibilité"
+          }
+        }
+      }
+    },
+    "Open Glace Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les réglages de Glace"
+          }
+        }
+      }
+    },
+    "Open Menu Bar Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les réglages Barre des menus"
+          }
+        }
+      }
+    },
+    "Open System Settings": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir Réglages Système"
+          }
+        }
+      }
+    },
+    "Original Ice project": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projet Ice original"
+          }
+        }
+      }
+    },
+    "Other": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autres"
+          }
+        }
+      }
+    },
+    "Permission Granted": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisation accordée"
+          }
+        }
+      }
+    },
+    "Permissions": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisations"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter"
+          }
+        }
+      }
+    },
+    "Quit Glace": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitter Glace"
+          }
+        }
+      }
+    },
+    "Record Hotkey": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer"
+          }
+        }
+      }
+    },
+    "Refresh": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actualiser"
+          }
+        }
+      }
+    },
+    "Report a Bug": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signaler un bug"
+          }
+        }
+      }
+    },
+    "Review Detected Items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir les éléments détectés"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser"
+          }
+        }
+      }
+    },
+    "Reset Menu Bar Appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réinitialiser l'apparence de la barre des menus"
+          }
+        }
+      }
+    },
+    "Reset to the default spacing": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rétablir l'espacement par défaut"
+          }
+        }
+      }
+    },
+    "Right-click in an empty area of the menu bar to display a minimal version of Glace's menu. Disable this setting if you encounter conflicts with other apps.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliquez avec le bouton droit dans une zone vide de la barre des menus pour afficher une mini-version du menu de Glace. Désactivez ce réglage si vous rencontrez des conflits avec d'autres apps."
+          }
+        }
+      }
+    },
+    "Round Cap": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrémité arrondie"
+          }
+        }
+      }
+    },
+    "Screen Recording": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrement de l'écran"
+          }
+        }
+      }
+    },
+    "Scroll or swipe in the menu bar to show hidden menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faites défiler ou balayez la souris dans la barre des menus pour afficher les éléments masqués."
+          }
+        }
+      }
+    },
+    "Search Menu Bar Items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher parmi les éléments de la barre des menus."
+          }
+        }
+      }
+    },
+    "Search menu bar items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher parmi les éléments de la barre des menus."
+          }
+        }
+      }
+    },
+    "Search menu bar items…": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher des éléments de la barre des menus…"
+          }
+        }
+      }
+    },
+    "Section divider style": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Style du séparateur de sections"
+          }
+        }
+      }
+    },
+    "Shadow": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ombre"
+          }
+        }
+      }
+    },
+    "Shape Kind": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forme"
+          }
+        }
+      }
+    },
+    "Show %@ Section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la section %@"
+          }
+        }
+      }
+    },
+    "Show Glace icon": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher l'icône Glace dans la barre des menus"
+          }
+        }
+      }
+    },
+    "Show all sections when ⌘ Command + dragging menu bar items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher toutes les sections lorsque des éléments de la barre des menus sont déplacé avec « ⌘ Command »"
+          }
+        }
+      }
+    },
+    "Show hidden menu bar items in a separate bar below the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les éléments masqués dans une barre séparée sous la barre des menus."
+          }
+        }
+      }
+    },
+    "Show on click": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher en cliquant"
+          }
+        }
+      }
+    },
+    "Show on hover": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher en survolant"
+          }
+        }
+      }
+    },
+    "Show on hover delay": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps avant l’affichage au survol"
+          }
+        }
+      }
+    },
+    "Show on scroll": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher en défilant"
+          }
+        }
+      }
+    },
+    "Smart": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intelligent"
+          }
+        }
+      }
+    },
+    "Solid": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opaque"
+          }
+        }
+      }
+    },
+    "Split": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segmentée"
+          }
+        }
+      }
+    },
+    "Square Cap": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrémité plate"
+          }
+        }
+      }
+    },
+    "Strategy": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        }
+      }
+    },
+    "Support Glace": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soutenir Glace"
+          }
+        }
+      }
+    },
+    "Temporarily shown item delay": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Délai des éléments affichés temporairement"
+          }
+        }
+      }
+    },
+    "The Glace Bar is centered below the Glace icon.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La « Glace Bar » est centrée sous l'icône Glace."
+          }
+        }
+      }
+    },
+    "The Glace Bar is centered below the mouse pointer.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La « Glace Bar » est centrée sous le pointeur de la souris."
+          }
+        }
+      }
+    },
+    "The Glace Bar requires screen recording permissions.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La « Glace Bar » nécessite l'autorisation « enregistrement de l'écran »."
+          }
+        }
+      }
+    },
+    "The Glace Bar's location changes based on context.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'emplacement de la « Glace Bar » varie selon le contexte choisi."
+          }
+        }
+      }
+    },
+    "The amount of time to wait before hiding temporarily shown menu bar items.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée d’attente avant de masquer les éléments affichés temporairement."
+          }
+        }
+      }
+    },
+    "The amount of time to wait before showing on hover.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Délai d’attente avant affichage suite au survol de la souris. "
+          }
+        }
+      }
+    },
+    "This action cannot be undone.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette action est irréversible."
+          }
+        }
+      }
+    },
+    "Timed": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Délai"
+          }
+        }
+      }
+    },
+    "Tint": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teinte"
+          }
+        }
+      }
+    },
+    "Tip: You can also edit these settings by right-clicking in an empty area of the menu bar.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Astuce : vous pouvez aussi modifier ces réglages en faisant un clic droit dans une zone vide de la barre des menus."
+          }
+        }
+      }
+    },
+    "Toggle application menus": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher / masquer les menus des applications"
+          }
+        }
+      }
+    },
+    "Toggle the always-hidden section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher / masquer la section cachée"
+          }
+        }
+      }
+    },
+    "Toggle the hidden section": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher / masquer la section masquée"
+          }
+        }
+      }
+    },
+    "Trailing End Cap": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrémité de fin"
+          }
+        }
+      }
+    },
+    "Type Hotkey": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veuillez taper"
+          }
+        }
+      }
+    },
+    "Unable to display menu bar items": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible d'afficher les éléments de la barre des menus"
+          }
+        }
+      }
+    },
+    "Use Glace Bar": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser la « Glace Bar »"
+          }
+        }
+      }
+    },
+    "Use dynamic appearance": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apparence dynamique selon le mode"
+          }
+        }
+      }
+    },
+    "Use inset shape on screens with notch": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utiliser une forme adaptée à l'encoche sur les écrans qui en ont une"
+          }
+        }
+      }
+    },
+    "Use the + button in System Settings to add %@.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisez le bouton + dans Réglages Système pour ajouter %@."
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Visible": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visible"
+          }
+        }
+      }
+    },
+    "default": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "par défaut"
+          }
+        }
+      }
+    },
+    "left click": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clic gauche"
+          }
+        }
+      }
+    },
+    "macOS 27 manages hidden and overflow items with its double arrow. Glace keeps the legacy hide, reveal, and spacing controls disabled on this system to avoid conflicts.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS 27 gère les éléments masqués et en surplus avec sa double flèche. Glace désactive sur ce système les anciennes commandes de masquage, d’affichage et d’espacement afin d’éviter les conflits."
+          }
+        }
+      }
+    },
+    "max": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "max"
+          }
+        }
+      }
+    },
+    "none": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aucun"
+          }
+        }
+      }
+    },
+    "right click": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "clic droit"
+          }
+        }
+      }
+    },
+    "•": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "•"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -14,6 +14,12 @@ final class MenuBarItemManager: ObservableObject {
     /// The current cache of menu bar items.
     @Published private(set) var itemCache = ItemCache(displayID: nil)
 
+    /// Items published by MenuBarAgent through Accessibility on macOS 27.
+    @Published private(set) var systemManagedItems = [MenuBarItemSnapshot]()
+
+    /// Current state of the macOS 27 read-only discovery path.
+    @Published private(set) var discoveryState = MenuBarItemDiscoveryState.loading
+
     /// Logger for the menu bar item manager.
     private nonisolated let logger = Logger.menuBarItemManager
 
@@ -340,6 +346,11 @@ extension MenuBarItemManager {
     /// the hidden and always-hidden sections are correctly ordered,
     /// arranging them into valid positions if needed.
     func cacheItemsRegardless(_ currentItemWindowIDs: [CGWindowID]? = nil) async {
+        if #available(macOS 27.0, *) {
+            await cacheSystemManagedItems()
+            return
+        }
+
         await cacheActor.runCacheTask { [weak self] in
             guard let self else {
                 return
@@ -375,10 +386,40 @@ extension MenuBarItemManager {
     /// the hidden and always-hidden sections are correctly ordered,
     /// arranging them into valid positions if needed.
     func cacheItemsIfNeeded() async {
+        if #available(macOS 27.0, *) {
+            guard appState?.navigationState.settingsNavigationIdentifier == .menuBarLayout else {
+                return
+            }
+            await cacheSystemManagedItems()
+            return
+        }
+
         let itemWindowIDs = Bridging.getMenuBarWindowList(option: [.itemsOnly, .activeSpace])
         if await cacheActor.cachedItemWindowIDs != itemWindowIDs {
             await cacheItemsRegardless(itemWindowIDs)
         }
+    }
+
+    /// Refreshes the status items that macOS 27 exposes through Accessibility.
+    @available(macOS 27.0, *)
+    private func cacheSystemManagedItems() async {
+        guard AXHelpers.isProcessTrusted() else {
+            systemManagedItems = []
+            discoveryState = .permissionRequired
+            return
+        }
+
+        if systemManagedItems.isEmpty {
+            discoveryState = .loading
+        }
+
+        let items = await Task.detached(priority: .userInitiated) {
+            MenuBarItemDiscovery.discover()
+        }.value
+
+        systemManagedItems = items
+        discoveryState = items.isEmpty ? .unavailable : .available
+        logger.info("Discovered \(items.count, privacy: .public) macOS 27 menu bar items through Accessibility")
     }
 }
 

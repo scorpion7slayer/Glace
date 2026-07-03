@@ -36,6 +36,11 @@ final class MenuBarSection {
         var localized: LocalizedStringKey {
             LocalizedStringKey(displayString)
         }
+
+        /// A localized string for AppKit interfaces.
+        var localizedString: String {
+            String(localized: String.LocalizationValue(displayString))
+        }
     }
 
     /// The name of the section.

@@ -143,10 +143,10 @@ struct PermissionsView: View {
                         .bold()
 
                     VStack(alignment: .leading) {
-                        ForEach(permission.details, id: \.self) { detail in
+                        ForEach(permission.details.indices, id: \.self) { index in
                             HStack {
                                 Text("•").bold()
-                                Text(detail).fontWeight(.medium)
+                                Text(permission.details[index]).fontWeight(.medium)
                             }
                         }
                     }

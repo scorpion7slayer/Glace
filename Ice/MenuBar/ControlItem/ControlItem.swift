@@ -91,6 +91,10 @@ final class ControlItem {
                 button.target = controlItem
                 button.action = #selector(controlItem.performAction)
                 button.sendAction(on: [.leftMouseDown, .rightMouseUp])
+
+                if #available(macOS 27.0, *) {
+                    button.setAccessibilityIdentifier(controlItem.identifier.rawValue)
+                }
             } else {
                 self.constraint = nil
             }
@@ -453,14 +457,21 @@ final class ControlItem {
     /// Performs the control item's action.
     @objc private func performAction() {
         guard
-            let menuBarManager = appState?.menuBarManager,
+            let appState,
             let event = NSApp.currentEvent
         else {
             return
         }
+        let menuBarManager = appState.menuBarManager
 
         switch event.type {
         case .leftMouseDown:
+            if #available(macOS 27.0, *) {
+                appState.navigationState.settingsNavigationIdentifier = .menuBarLayout
+                (NSApp.delegate as? AppDelegate)?.openSettingsWindow()
+                return
+            }
+
             let modifierFlags = NSEvent.modifierFlags
 
             // Running this from a Task seems to improve the visual
@@ -503,7 +514,7 @@ final class ControlItem {
         let menu = NSMenu(title: "Glace")
 
         let settingsItem = NSMenuItem(
-            title: "Glace Settings…",
+            title: String(localized: "Glace Settings…"),
             action: #selector(AppDelegate.openSettingsWindow),
             keyEquivalent: ","
         )
@@ -513,7 +524,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let searchItem = NSMenuItem(
-            title: "Search Menu Bar Items",
+            title: String(localized: "Search Menu Bar Items"),
             action: #selector(showSearchPanel),
             keyEquivalent: ""
         )
@@ -537,8 +548,11 @@ final class ControlItem {
             else {
                 continue
             }
+            let titleFormat = section.isHidden
+                ? String(localized: "Show %@ Section")
+                : String(localized: "Hide %@ Section")
             let item = NSMenuItem(
-                title: "\(section.isHidden ? "Show" : "Hide") \(name.displayString) Section",
+                title: String(format: titleFormat, name.localizedString),
                 action: #selector(toggleMenuBarSection),
                 keyEquivalent: ""
             )
@@ -557,7 +571,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let checkForUpdatesItem = NSMenuItem(
-            title: "Check for Updates…",
+            title: String(localized: "Check for Updates…"),
             action: #selector(checkForUpdates),
             keyEquivalent: ""
         )
@@ -567,7 +581,7 @@ final class ControlItem {
         menu.addItem(.separator())
 
         let quitItem = NSMenuItem(
-            title: "Quit Glace",
+            title: String(localized: "Quit Glace"),
             action: #selector(NSApp.terminate),
             keyEquivalent: "q"
         )
