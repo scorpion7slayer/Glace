@@ -3,10 +3,8 @@
 //  Ice
 //
 
-import AXSwift
 import Combine
 import Cocoa
-import ScreenCaptureKit
 
 // MARK: - Permission
 
@@ -19,20 +17,28 @@ class Permission: ObservableObject, Identifiable {
 
     /// The title of the permission.
     let title: String
+
     /// Descriptive details for the permission.
     let details: [String]
+
     /// A Boolean value that indicates if the app can work without this permission.
     let isRequired: Bool
 
+    /// The title shown by buttons that initiate the permission flow.
+    let requestButtonTitle: String
+
     /// The URL of the settings pane to open.
     private let settingsURL: URL?
+
     /// The function that checks permissions.
     private let check: () -> Bool
+
     /// The function that requests permissions.
     private let request: () -> Void
 
     /// Observer that runs on a timer to check permissions.
     private var timerCancellable: AnyCancellable?
+
     /// Observer that observes the ``hasPermission`` property.
     private var hasPermissionCancellable: AnyCancellable?
 
@@ -42,6 +48,7 @@ class Permission: ObservableObject, Identifiable {
     ///   - title: The title of the permission.
     ///   - details: Descriptive details for the permission.
     ///   - isRequired: A Boolean value that indicates if the app can work without this permission.
+    ///   - requestButtonTitle: The title shown by buttons that initiate the permission flow.
     ///   - settingsURL: The URL of the settings pane to open.
     ///   - check: A function that checks permissions.
     ///   - request: A function that requests permissions.
@@ -49,6 +56,7 @@ class Permission: ObservableObject, Identifiable {
         title: String,
         details: [String],
         isRequired: Bool,
+        requestButtonTitle: String = "Grant Permission",
         settingsURL: URL?,
         check: @escaping () -> Bool,
         request: @escaping () -> Void
@@ -56,6 +64,7 @@ class Permission: ObservableObject, Identifiable {
         self.title = title
         self.details = details
         self.isRequired = isRequired
+        self.requestButtonTitle = requestButtonTitle
         self.settingsURL = settingsURL
         self.check = check
         self.request = request
@@ -75,8 +84,15 @@ class Permission: ObservableObject, Identifiable {
             return
         }
 
-        timerCancellable = Timer.publish(every: 1, on: .main, in: .default)
+        let timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
+
+        let appDidBecomeActive = NotificationCenter.default
+            .publisher(for: NSApplication.didBecomeActiveNotification)
+            .map { _ in Date() }
+
+        timerCancellable = timer
+            .merge(with: appDidBecomeActive)
             .sink { [weak self] _ in
                 self?.refreshPermissionState()
             }
@@ -84,6 +100,9 @@ class Permission: ObservableObject, Identifiable {
 
     /// Performs the request and opens the System Settings app to the appropriate pane.
     func performRequest() {
+        // Start observing before macOS moves focus to the consent dialog or
+        // System Settings, so accepting a permission is reflected immediately.
+        startCheck()
         request()
         if let settingsURL {
             NSWorkspace.shared.open(settingsURL)
@@ -130,12 +149,12 @@ final class AccessibilityPermission: Permission {
                 "Arrange menu bar items.",
             ],
             isRequired: true,
-            settingsURL: nil,
+            settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"),
             check: {
-                checkIsProcessTrusted()
+                AXHelpers.isProcessTrusted()
             },
             request: {
-                checkIsProcessTrusted(prompt: true)
+                AXHelpers.isProcessTrusted(prompt: true)
             }
         )
     }
@@ -145,16 +164,34 @@ final class AccessibilityPermission: Permission {
 
 final class ScreenRecordingPermission: Permission {
     init() {
+        let details: [String]
+        let requestButtonTitle: String
+
+        if #available(macOS 26.0, *) {
+            details = [
+                "Change the menu bar's appearance.",
+                "Display images of individual menu bar items.",
+                "Use the + button in System Settings to add this app.",
+            ]
+            requestButtonTitle = "Open System Settings"
+        } else {
+            details = [
+                "Change the menu bar's appearance.",
+                "Display images of individual menu bar items.",
+            ]
+            requestButtonTitle = "Grant Permission"
+        }
+
         super.init(
             title: "Screen Recording",
-            details: [
-                "Edit the menu bar's appearance.",
-                "Display images of individual menu bar items.",
-            ],
+            details: details,
             isRequired: false,
+            requestButtonTitle: requestButtonTitle,
             settingsURL: URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"),
             check: {
-                ScreenCapture.checkPermissions()
+                // Keep the shared capture cache synchronized with changes made
+                // in System Settings while this screen is open.
+                ScreenCapture.cachedCheckPermissions(reset: true)
             },
             request: {
                 ScreenCapture.requestPermissions()
