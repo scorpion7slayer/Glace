@@ -3,6 +3,19 @@
     <channel>
         <title>Glace</title>
         <item>
+            <title>2.0.0</title>
+            <pubDate>Sat, 04 Jul 2026 12:14:55 +0000</pubDate>
+            <sparkle:version>2000</sparkle:version>
+            <sparkle:shortVersionString>2.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:releaseNotesLink>https://scorpion7slayer.github.io/Glace/updates/Glace-2.0.0.html</sparkle:releaseNotesLink>
+            <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace-2.0.0.dmg" length="5787500" type="application/octet-stream" sparkle:edSignature="IO/5xn7U1YDTGm+xXbo90Dof6sC4/7a/mRihcrumMj6JPef7Rs0v12UX9BhSiqtfx7z3nXUifj0ONHR6HlU3Cw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace2000-7.delta" sparkle:deltaFrom="7" length="3720186" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864784" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="yVmnv9Xrz2fgh7dNAQOV1dUgBNeClgm0CMCnFxMiFU4JyEP+6PeLrKjDatRwI1QZxNDEYvYjOA6tM15MvJdnBg=="/>
+                <enclosure url="https://scorpion7slayer.github.io/Glace/updates/Glace2000-6.delta" sparkle:deltaFrom="6" length="3720466" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="864784" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="MATaVnA5o5qv0JxGgkBXwp+NMXVPXUrOl8sNGYYYBAlehl3sL6ur6f20R+snTiv0A163Bj0Q77QMkz8EJZJDCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>0.11.15</title>
             <pubDate>Tue, 10 Mar 2026 21:56:09 +0000</pubDate>
             <sparkle:version>7</sparkle:version>
